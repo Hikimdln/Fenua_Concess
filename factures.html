@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Factures - Fenua Concess</title>
 <link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="assets/logo1.png">
 <style>
 .main-content {
   margin-left:220px;
@@ -21,8 +22,12 @@ form#factureForm {
   max-width:600px;
 }
 </style>
+<script src="auth.js"></script>
 </head>
 <body>
+
+<!-- --- Auth protection --- -->
+<script src="auth.js"></script>
 
 <div class="sidebar">
   <h2>Fenua Concess</h2>
@@ -79,6 +84,10 @@ form#factureForm {
 <button id="scrollTopBtn" title="Remonter en haut">↑</button>
 
 <script>
+// --- Pré-remplir vendeur avec utilisateur connecté ---
+const fcUser = sessionStorage.getItem('fc_user_display') || sessionStorage.getItem('fc_user');
+if(fcUser) document.getElementById('vendeur').value = fcUser;
+
 // --- CSV complet intégré ---
 const csvData = `VÉHICULES;PRIX USINE;PRIX VENTE
 COMPACTS;;
@@ -351,7 +360,7 @@ lines.forEach(line => {
     vehiculesParCategorie[currentCat] = [];
   } else if(currentCat && vehicule){
     vehiculesParCategorie[currentCat].push(vehicule);
-    prixVehicule[vehicule] = parseInt(prixVente.replace(/\s/g,'')) || 0; // entier
+    prixVehicule[vehicule] = prixVente ? parseInt(prixVente.replace(/\s/g,'')) : 0;
   }
 });
 
@@ -384,31 +393,24 @@ categorieSelect.addEventListener('change', () => {
   }
 });
 
-// --- Remplissage automatique du prix selon véhicule ---
+// --- Remplissage automatique du prix ---
 vehiculeSelect.addEventListener('change', () => {
   const v = vehiculeSelect.value;
-  if(prixVehicule[v]){
-    prix.value = prixVehicule[v]; // entier
-    updateTotal();
-  } else {
-    prix.value = '';
-    total.value = '';
-  }
+  prix.value = prixVehicule[v] || 0;
+  updateTotal();
 });
 
 // --- Calcul automatique du total ---
 const quantite = document.getElementById('quantite');
-
 function updateTotal(){
   const q = parseInt(quantite.value) || 0;
   const p = parseInt(prix.value) || 0;
-  total.value = q * p; // entier
+  total.value = q * p;
 }
 quantite.addEventListener('input', updateTotal);
 
 // --- Envoi webhook Discord ---
 const factureForm = document.getElementById('factureForm');
-
 factureForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = {
@@ -454,6 +456,7 @@ factureForm.addEventListener('submit', async (e) => {
       factureForm.reset();
       prix.value = '';
       total.value = '';
+      if(fcUser) document.getElementById('vendeur').value = fcUser;
     } else {
       msg.textContent = '❌ Erreur lors de l\'envoi';
       msg.style.color = 'red';
