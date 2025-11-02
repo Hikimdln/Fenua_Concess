@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accueil - Fenua Concess</title>
+<link rel="icon" type="image/png" href="assets/logo1.png">
+<style>
+body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align:center; padding:50px; }
+h1 { color:#ff0000; }
+button {
+  margin-top: 30px;
+  padding: 12px 24px;
+  border:none;
+  border-radius:8px;
+  background:#ff0000;
+  color:#fff;
+  font-size:1rem;
+  cursor:pointer;
+  transition: background 0.3s;
+}
+button:hover { background:#00b4db; }
+</style>
+</head>
+<body>
+<h1>Bienvenue sur Fenua Concess !</h1>
+<p>Vous êtes connecté.</p>
+
+<!-- Bouton de déconnexion -->
+<button id="logoutBtn">Se déconnecter</button>
+
+<script>
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  // Pour une vraie déconnexion, il faudrait appeler une API backend
+  window.location.href = 'login.html';
+});
+</script>
+</body>
+</html>
