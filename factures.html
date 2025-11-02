@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factures - Fenua Concess</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.main-content {
+  margin-left:220px;
+  padding:80px 30px 30px 30px;
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  box-sizing:border-box;
+}
+form#factureForm {
+  width:100%;
+  max-width:600px;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Fenua Concess</h2>
+  <a href="index.html">Accueil</a>
+  <a href="catalogue.html">Catalogue</a>
+  <a href="factures.html">Factures</a>
+  <a href="login.html" class="logout">Déconnexion</a>
+</div>
+
+<header>Créer une facture</header>
+
+<div class="main-content">
+  <div style="width:100%;">
+    <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
+
+    <form id="factureForm">
+      <label for="client">Nom du client :</label>
+      <input type="text" id="client" placeholder="Nom du client" required>
+
+      <label for="vendeur">Nom du vendeur :</label>
+      <input type="text" id="vendeur" placeholder="Nom du vendeur" required>
+
+      <label for="date">Date :</label>
+      <input type="date" id="date" required>
+
+      <label for="heure">Heure :</label>
+      <input type="time" id="heure" required>
+
+      <label for="categorie">Catégorie :</label>
+      <select id="categorie" required>
+        <option value="">-- Sélectionner une catégorie --</option>
+      </select>
+
+      <label for="vehicule">Véhicule :</label>
+      <select id="vehicule" required>
+        <option value="">-- Sélectionner un véhicule --</option>
+      </select>
+
+      <label for="quantite">Quantité :</label>
+      <input type="number" id="quantite" min="1" value="1" required>
+
+      <label for="prix">Prix unitaire :</label>
+      <input type="number" id="prix" min="0" required readonly>
+
+      <label for="total">Total :</label>
+      <input type="number" id="total" readonly>
+
+      <button type="submit">Envoyer la facture</button>
+      <p id="message"></p>
+    </form>
+  </div>
+</div>
+
+<button id="scrollTopBtn" title="Remonter en haut">↑</button>
+
+<script>
+// --- CSV complet intégré ---
+const csvData = `VÉHICULES;PRIX USINE;PRIX VENTE
+COMPACTS;;
+Blista;8000;30400
+Brioso R/A;18000;68400
+Issi;10000;38000
+Panto;10000;38000
+Prairie;12000;45600
+COUPÉS;;
+Cognoscenti Cabrio;55000;209000
+Exemplar;32000;121600
+F620;40000;152000
+Felon;42000;159600
+Felon GT;55000;209000
+Jackal;38000;144000
+Oracle XS;35000;133000
+Sentinel;32000;121600
+Sentinel XS;40000;152000
+Windsor;95000;361000
+Windsor Drop;125000;475000
+Zion  Cabrio;45000;171000
+GABZ;;
+Pfister2;600000;2280000
+Argento 7F;500000;1900000
+Club XR;400000;1520000
+Gresley STX;600000;2280000
+Biriz SZ;400000;1520000
+MOTOS;;
+Akuma;7500;28500
+Avarus;18000;68400
+Bagger;13500;51300
+Bati 801;12000;45600
+Bati 801RR;19000;72200
+BF400;6500;24700
+BMX (Vélo);160;608
+Carbon RS;18000;68400
+Chimera;38000;144400
+Cliffhanger;9500;36100
+Cruiser (Vélo);510;1938
+Daemon;11500;43700
+Daemon High;13500;51300
+Defiler;9800;37240
+Double T;28000;106400
+Enduro;5500;20900
+Esskey;4200;15960
+Faggio;1900;7220
+Vespa;2800;10640
+Fixter (Vélo);225;855
+Gargoyle;16500;62700
+Hakuchou;31000;117800
+Hakuchou Sport;55000;209000
+Hexer ;12000;45600
+Innovation;23500;89300
+Manchez;5300;20140
+Nemesis;5800;22040
+Nightblade;35000;133000
+PCJ-600;6200;23560
+Ruffian;6800;25840
+Sanchez;5300;20140
+Sanchez Sport;5300;20140
+Sanctus;25000;95000
+Scorcher (Vélo);280;1054
+Shotaro Concept;320000;1216000
+Sovereign;22000;83600
+Thrust;24000;91200
+Tri bike (Vélo);520;1976
+Vader;7200;27360
+Vortex;9800;37240
+Wofisbane;9000;34200
+Zombie;9500;36100
+Zombie luxuary;12000;45600
+MUSCLE;;
+Blade;15000;57000
+Buccaneer;18000;68400
+Buccaneer Rider;24000;91200
+Chino;15000;57000
+Chino Luxe;19000;72200
+Coquette BlackFin;55000;209000
+Dominator;35000;133000
+Dukes;28000;106400
+Faction;20000;76000
+Faction Rider;30000;114000
+Faction XL;40000;152000
+Gauntlet;30000;114000
+Hermes;535000;2033000
+Hotknife;125000;475000
+Hustler;625000;2375000
+Nightshade;65000;247000
+Phoenix;12500;47500
+Picador;18000;68400
+Ruiner 2 ;5745600;21833280
+Sabre Turbo;20000;76000
+Sabre GT;25000;95000
+Slam Van;11500;43700
+Tampa;16000;60800
+Vigero;12500;47500
+Virgo;14000;53200
+Voodoo;7200;27360
+Yoosemite;485000;1843000
+TOUT-TERRAIN;;
+Bf injection;16000;60800
+Bifta;12000;45000
+Blazer;6500;24700
+Blazer Sport;8500;32300
+Blazer5;1755600;6671280
+Brawler;45000;171000
+Bubsta 6x6;120000;456000
+Dune Buggy;8000;30400
+Guardian;45000;171000
+Kamacho;345000;1311000
+The Liberator;210000;798000
+Rebel;35000;133000
+Riata;380000;1444000
+Sandking;55000;209000
+Trophy Truck;60000;228000
+Trophy Truck Limited;80000;304000
+BERLINES;;
+Asea;5500;20900
+Cognoscenti;55000;209000
+Emperor;8500;32300
+Fugitive;12000;45600
+Glendale;6500;24700
+Intruder;7500;28500
+Premier;8000;30400
+Primo Custom;14000;53200
+Regina;5000;19000
+Shafter;25000;95000
+Stretch;90000;342000
+Super Diamond;130000;494000
+Tailgater;30000;114000
+Warrener;4000;15200
+Washington;9000;34200
+SPORTIVES;;
+Alpha;60000;228000
+Banshee;70000;266000
+Bestia GTS;55000;209000
+Buffalo;12000;45600
+Buffalo S;20000;76000
+Carbonizzare;75000;285000
+Comet;65000;247000
+Comet 5;1145000;4351000
+Coquette;65000;247000
+Elegy;38500;146300
+Feltzer;55000;209000
+Furore GT;45000;171000
+Fusilade;40000;152000
+Jester;65000;247000
+Jester (Racecar);135000;513000
+Khamelion;38000;144400
+Kuruma;30000;114000
+Lynx;40000;152000
+Mamba;70000;266000
+Massacro;65000;247000
+Massacro (Racecar);130000;494000
+Neon;1500000;5700000
+9F;65000;247000
+9F Cabrio;80000;304000
+Omnis;35000;133000
+Pariah;1420000;5396000
+Penumbra;28000;106400
+Raiden;1375000;5225000
+Rapid GT;35000;133000
+Rapid GT Convertible;45000;171000
+Revolter;1610000;6118000
+Schafter V12;50000;190000
+Sentinel 3;650000;2470000
+Seven 70;39500;150100
+Streiter;500000;1900000
+Stromberg ;3185350;12104330
+Sultan;15000;57000
+Surano;50000;190000
+Drift Tampa;80000;304000
+Tropos;40000;152000
+Verlierer;70000;266000
+CLASSIQUE SPORTIVES;;
+Ardent;1150000;4370000
+Btype;62000;235600
+Btype Hotroad;155000;589000
+Btype Luxe;85000;323000
+Casco;30000;114000
+Coquette Classic;40000;152000
+Deluxo;4721500;17941700
+Stirling GT ;65000;247000
+GT 500;785000;2983000
+Manana;12800;48640
+Monroe;55000;209000
+Pigalle;20000;76000
+Rapid GT3;885000;3363000
+Retinue;615000;2337000
+Savestra;990000;3762000
+Stinger;80000;304000
+Stinger GT;75000;285000
+Viseris;875000;3325000
+Z190;900000;3420000
+Z-Type;220000;836000
+SUVs;;
+Baller;40000;152000
+Baller Sport;60000;228000
+Cavalcade;55000;209000
+Contender;70000;266000
+Dubsta;45000;171000
+Dubsta Luxuary;60000;228000
+Phantom;17000;64600
+Grabger;50000;190000
+Gresley;47500;180500
+Huntley S;40000;152000
+Landstalker;35000;133000
+Mesa;16000;60800
+Mesa Trail;40000;152000
+Patriot;55000;209000
+Radius;29000;110200
+Rocoto;45000;171000
+Seminole;25000;95000
+XLS;32000;121600
+VANS;;
+Bison;45000;171000
+Bobcat XL;32000;121600
+Burrito;19000;72200
+Camper;42000;159600
+Gang Burrito;45000;171000
+Burrito;29000;110200
+Journey;6500;24700
+Minivan;13000;49400
+Moonbeam;18000;68400
+Moonbeam Rider;35000;133000
+Paradise;19000;72200
+Rumpo;15000;57000
+Rumpo Trail;19500;74100
+Surfer;12000;45600
+Youga;10800;41040
+Youga Luxury;14500;55100
+SUPER SPORTIVES;;
+Adder;90000;342000
+Autarch;1955000;7429000
+Banshee 900R;255000;969000
+Bullet;90000;342000
+Cheetah;375000;1425000
+Cyclone;1890000;7182000
+Entity XF;425000;1615000
+FMJ;185000;703000
+Infernus;180000;684000
+RE-7B;325000;1235000
+Oppressor;3524500;13393100
+Osiris;160000;608000
+Pfister ;85000;323000
+X80 Proto;2500000;9500000
+Reaper;150000;570000
+SC1;1603000;6091400
+ETR1;220000;836000
+Sultan RS;65000;247000
+T20;300000;1140000
+Turismo R;350000;1330000
+Tyrus;600000;2280000
+Vacca;120000;456000
+Visione;2250000;8550000
+Voltic;90000;342000
+Voltic 2;3830400;14555520
+Zentorno;1500000;5700000`;
+
+// --- Transforme CSV en objets ---
+const lines = csvData.split('\n');
+let currentCat = null;
+const vehiculesParCategorie = {};
+const prixVehicule = {};
+
+lines.forEach(line => {
+  const [vehicule, prixUsine, prixVente] = line.split(';').map(s => s.trim());
+  if(vehicule && !prixUsine && !prixVente){
+    currentCat = vehicule;
+    vehiculesParCategorie[currentCat] = [];
+  } else if(currentCat && vehicule){
+    vehiculesParCategorie[currentCat].push(vehicule);
+    prixVehicule[vehicule] = parseInt(prixVente.replace(/\s/g,'')) || 0; // entier
+  }
+});
+
+// --- Remplissage catégorie ---
+const categorieSelect = document.getElementById('categorie');
+const vehiculeSelect = document.getElementById('vehicule');
+const prix = document.getElementById('prix');
+const total = document.getElementById('total');
+
+Object.keys(vehiculesParCategorie).forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat;
+  opt.textContent = cat;
+  categorieSelect.appendChild(opt);
+});
+
+// --- Filtrage véhicules selon catégorie ---
+categorieSelect.addEventListener('change', () => {
+  const cat = categorieSelect.value;
+  vehiculeSelect.innerHTML = '<option value="">-- Sélectionner un véhicule --</option>';
+  prix.value = '';
+  total.value = '';
+  if(vehiculesParCategorie[cat]){
+    vehiculesParCategorie[cat].forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v;
+      vehiculeSelect.appendChild(opt);
+    });
+  }
+});
+
+// --- Remplissage automatique du prix selon véhicule ---
+vehiculeSelect.addEventListener('change', () => {
+  const v = vehiculeSelect.value;
+  if(prixVehicule[v]){
+    prix.value = prixVehicule[v]; // entier
+    updateTotal();
+  } else {
+    prix.value = '';
+    total.value = '';
+  }
+});
+
+// --- Calcul automatique du total ---
+const quantite = document.getElementById('quantite');
+
+function updateTotal(){
+  const q = parseInt(quantite.value) || 0;
+  const p = parseInt(prix.value) || 0;
+  total.value = q * p; // entier
+}
+quantite.addEventListener('input', updateTotal);
+
+// --- Envoi webhook Discord ---
+const factureForm = document.getElementById('factureForm');
+
+factureForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = {
+    client: document.getElementById('client').value,
+    vendeur: document.getElementById('vendeur').value,
+    date: document.getElementById('date').value,
+    heure: document.getElementById('heure').value,
+    categorie: categorieSelect.value,
+    vehicule: vehiculeSelect.value,
+    quantite: parseInt(quantite.value),
+    prix_unitaire: parseInt(prix.value),
+    total: parseInt(total.value)
+  };
+
+  try {
+    const webhookURL = 'https://discord.com/api/webhooks/1434167082018406530/h1MrBR0pL38eORKh0v85Y4DE2JMh0nS83J--pSdlmPsFMk64QHJb2X7Ajm-2XOjJ9wsb';
+    const res = await fetch(webhookURL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        embeds: [{
+          title: "🧾 Nouvelle facture - Fenua Concess",
+          color: 0x00ff00,
+          fields: [
+            { name: "Client", value: data.client, inline: true },
+            { name: "Vendeur", value: data.vendeur, inline: true },
+            { name: "Date", value: data.date, inline: true },
+            { name: "Heure", value: data.heure, inline: true },
+            { name: "Catégorie", value: data.categorie, inline: true },
+            { name: "Véhicule", value: data.vehicule, inline: true },
+            { name: "Quantité", value: data.quantite.toString(), inline: true },
+            { name: "Prix unitaire", value: data.prix_unitaire.toLocaleString(), inline: true },
+            { name: "Total", value: data.total.toLocaleString(), inline: true }
+          ]
+        }]
+      })
+    });
+
+    const msg = document.getElementById('message');
+    if(res.ok){
+      msg.textContent = '✅ Facture envoyée !';
+      msg.style.color = 'green';
+      factureForm.reset();
+      prix.value = '';
+      total.value = '';
+    } else {
+      msg.textContent = '❌ Erreur lors de l\'envoi';
+      msg.style.color = 'red';
+    }
+  } catch(err){
+    const msg = document.getElementById('message');
+    msg.textContent = '❌ Erreur lors de l\'envoi';
+    msg.style.color = 'red';
+    console.error(err);
+  }
+});
+
+// --- Bouton remonter en haut ---
+const scrollBtn = document.getElementById('scrollTopBtn');
+window.onscroll = function() {
+  scrollBtn.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) ? "block" : "none";
+};
+scrollBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+/* --- Reset & Base --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #f4f4f9;
+  display: flex;
+  flex-direction: row;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: 220px;
+  background: #ff0000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  transition: width 0.3s;
+  z-index: 200;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #fff;
+  padding: 15px 20px;
+  display: block;
+  transition: 0.3s;
+  border-radius: 8px;
+}
+
+.sidebar a:hover {
+  background: #00b4db;
+}
+
+/* --- Déconnexion en bas --- */
+.sidebar .logout {
+  margin-top: auto;
+  padding: 15px 20px;
+  background: #222;
+  text-align: center;
+  border-top: 1px solid #fff;
+}
+
+/* --- Header --- */
+header {
+  position: fixed;
+  top: 0;
+  left: 220px;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+/* --- Main content --- */
+.main-content {
+  margin-left: 220px;
+  padding: 80px 30px 30px 30px;
+  flex: 1;
+}
+
+/* --- Cards --- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  color: #ff0000;
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.card a:hover {
+  background: #00b4db;
+}
+
+/* --- Tables --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-top: 15px;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background: #ff0000;
+  color: #fff;
+}
+
+tr:hover {
+  background: #f1f1f1;
+}
+
+/* --- Forms --- */
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input, button, input[type="submit"] {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+button, input[type="submit"] {
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover, input[type="submit"]:hover {
+  background: #00b4db;
+}
+
+/* --- Messages --- */
+#message {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* --- Back button --- */
+.back-btn {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:0.3s;
+}
+
+.back-btn:hover {
+  background: #00b4db;
+}
+
+/* --- Scroll to top button --- */
+#scrollTopBtn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 100;
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: background 0.3s;
+}
+
+#scrollTopBtn:hover {
+  background: #00b4db;
+}
+
+/* --- Responsive --- */
+@media(max-width:800px) {
+  .sidebar { width: 60px; }
+  header { left: 60px; padding: 0 10px; font-size:1.2rem; }
+  .main-content { margin-left: 60px; padding:80px 10px 10px 10px; }
+}
+
+@media(max-width:500px){
+  .cards { grid-template-columns:1fr; }
+}

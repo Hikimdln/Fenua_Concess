@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue - Fenua Concess</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Fenua Concess</h2>
+  <a href="index.html">Accueil</a>
+  <a href="catalogue.html">Catalogue</a>
+  <a href="factures.html">Factures</a>
+  <a href="login.html" class="logout">Déconnexion</a>
+</div>
+
+<header>Catalogue des véhicules</header>
+
+<div class="main-content">
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
+
+  <table id="catalogueTable">
+    <thead>
+      <tr>
+        <th>Véhicule</th>
+        <th>Prix usine</th>
+        <th>Prix vente</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<button id="scrollTopBtn" title="Remonter en haut">↑</button>
+
+<script>
+// Lecture CSV
+fetch('catalogue.csv')
+  .then(res => res.text())
+  .then(data => {
+    const rows = data.split('\n').slice(1);
+    const tbody = document.querySelector('#catalogueTable tbody');
+    let currentCategory = '';
+
+    rows.forEach(row => {
+      if(row.trim() === '') return;
+      const cols = row.split(';').map(c => c.trim());
+
+      if(cols[0] && !cols[1] && !cols[2]){
+        currentCategory = cols[0];
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 3;
+        td.textContent = currentCategory;
+        td.style.fontWeight = 'bold';
+        td.style.backgroundColor = '#f0f0f0';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+      } else if(cols[0]){
+        const tr = document.createElement('tr');
+        tr.title = currentCategory;
+        cols.forEach(col => {
+          const td = document.createElement('td');
+          td.textContent = col || '-';
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      }
+    });
+  })
+  .catch(err => console.error("Erreur lecture CSV :", err));
+
+// Scroll Top
+const scrollBtn = document.getElementById('scrollTopBtn');
+window.onscroll = function() {
+  if(document.body.scrollTop > 100 || document.documentElement.scrollTop > 100){
+    scrollBtn.style.display = "block";
+  } else {
+    scrollBtn.style.display = "none";
+  }
+};
+scrollBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>

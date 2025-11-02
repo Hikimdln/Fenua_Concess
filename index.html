@@ -4,36 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Accueil - Fenua Concess</title>
-<link rel="icon" type="image/png" href="assets/logo1.png">
-<style>
-body { font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align:center; padding:50px; }
-h1 { color:#ff0000; }
-button {
-  margin-top: 30px;
-  padding: 12px 24px;
-  border:none;
-  border-radius:8px;
-  background:#ff0000;
-  color:#fff;
-  font-size:1rem;
-  cursor:pointer;
-  transition: background 0.3s;
-}
-button:hover { background:#00b4db; }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Bienvenue sur Fenua Concess !</h1>
-<p>Vous êtes connecté.</p>
 
-<!-- Bouton de déconnexion -->
-<button id="logoutBtn">Se déconnecter</button>
+<div class="sidebar">
+  <h2>Fenua Concess</h2>
+  <a href="index.html">Accueil</a>
+  <a href="catalogue.html">Catalogue</a>
+  <a href="factures.html">Factures</a>
+  <a href="login.html" class="logout">Déconnexion</a>
+</div>
 
-<script>
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  // Pour une vraie déconnexion, il faudrait appeler une API backend
-  window.location.href = 'login.html';
-});
-</script>
+<header>Portail Interne</header>
+
+<div class="main-content">
+  <div class="cards">
+    <div class="card">
+      <h3>Catalogue</h3>
+      <p>Consultez le catalogue.</p>
+      <a href="catalogue.html">Voir</a>
+    </div>
+    <div class="card">
+      <h3>Factures</h3>
+      <p>Créer ou envoyer une facture.</p>
+      <a href="factures.html">Accéder</a>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
