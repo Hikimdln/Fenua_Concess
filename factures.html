@@ -24,17 +24,15 @@ form#factureForm {
 </style>
 <script src="auth.js"></script>
 </head>
-<body>
 
-<!-- --- Auth protection --- -->
-<script src="auth.js"></script>
+<body>
 
 <div class="sidebar">
   <h2>Fenua Concess</h2>
   <a href="index.html">Accueil</a>
   <a href="catalogue.html">Catalogue</a>
   <a href="factures.html">Factures</a>
-  <a href="login.html" class="logout">Déconnexion</a>
+  <a href="#" class="logout" id="logoutBtn">Déconnexion</a>
 </div>
 
 <header>Créer une facture</header>
@@ -48,7 +46,7 @@ form#factureForm {
       <input type="text" id="client" placeholder="Nom du client" required>
 
       <label for="vendeur">Nom du vendeur :</label>
-      <input type="text" id="vendeur" placeholder="Nom du vendeur" required>
+      <input type="text" id="vendeur" readonly>
 
       <label for="date">Date :</label>
       <input type="date" id="date" required>
@@ -84,9 +82,19 @@ form#factureForm {
 <button id="scrollTopBtn" title="Remonter en haut">↑</button>
 
 <script>
-// --- Pré-remplir vendeur avec utilisateur connecté ---
-const fcUser = sessionStorage.getItem('fc_user_display') || sessionStorage.getItem('fc_user');
-if(fcUser) document.getElementById('vendeur').value = fcUser;
+// --- Vérifie si l'utilisateur est connecté ---
+const user = sessionStorage.getItem('fc_user');
+if(user){
+  document.getElementById('vendeur').value = user;
+} else {
+  window.location.href = "login.html";
+}
+
+// --- Bouton Déconnexion ---
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem('fc_user');
+  window.location.href = 'login.html';
+});
 
 // --- CSV complet intégré ---
 const csvData = `VÉHICULES;PRIX USINE;PRIX VENTE
@@ -360,7 +368,7 @@ lines.forEach(line => {
     vehiculesParCategorie[currentCat] = [];
   } else if(currentCat && vehicule){
     vehiculesParCategorie[currentCat].push(vehicule);
-    prixVehicule[vehicule] = prixVente ? parseInt(prixVente.replace(/\s/g,'')) : 0;
+    prixVehicule[vehicule] = parseInt(prixVente.replace(/\s/g,'')) || 0;
   }
 });
 
@@ -396,8 +404,13 @@ categorieSelect.addEventListener('change', () => {
 // --- Remplissage automatique du prix ---
 vehiculeSelect.addEventListener('change', () => {
   const v = vehiculeSelect.value;
-  prix.value = prixVehicule[v] || 0;
-  updateTotal();
+  if(prixVehicule[v]){
+    prix.value = prixVehicule[v];
+    updateTotal();
+  } else {
+    prix.value = '';
+    total.value = '';
+  }
 });
 
 // --- Calcul automatique du total ---
@@ -409,7 +422,7 @@ function updateTotal(){
 }
 quantite.addEventListener('input', updateTotal);
 
-// --- Envoi webhook Discord ---
+// --- Envoi Discord ---
 const factureForm = document.getElementById('factureForm');
 factureForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -454,9 +467,7 @@ factureForm.addEventListener('submit', async (e) => {
       msg.textContent = '✅ Facture envoyée !';
       msg.style.color = 'green';
       factureForm.reset();
-      prix.value = '';
-      total.value = '';
-      if(fcUser) document.getElementById('vendeur').value = fcUser;
+      document.getElementById('vendeur').value = user;
     } else {
       msg.textContent = '❌ Erreur lors de l\'envoi';
       msg.style.color = 'red';
