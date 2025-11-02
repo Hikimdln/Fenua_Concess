@@ -3,15 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Accueil - Fenua Concess</title>
+<title>Portail Interne - Fenua Concess</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/png" href="assets/logo1.png">
-<script src="auth.js"></script>
+<style>
+/* --- Sidebar spécifique --- */
+#userBlock {
+  text-align: center;
+  padding: 20px 10px 10px 10px;
+}
+
+#usernameDisplay {
+  font-weight: 900; /* Gros gras */
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+#usernameLine {
+  height: 2px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+</style>
 </head>
 
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
+  <div id="userBlock">
+    <div id="usernameDisplay"></div>
+    <div id="usernameLine"></div>
+  </div>
   <h2>Fenua Concess</h2>
   <a href="portail.html">Accueil</a>
   <a href="catalogue.html">Catalogue</a>
@@ -19,8 +42,10 @@
   <a href="index.html" class="logout" id="logoutBtn">Déconnexion</a>
 </div>
 
+<!-- Header -->
 <header>Portail Interne</header>
 
+<!-- Main content -->
 <div class="main-content">
   <h2 id="welcomeMessage" style="margin-bottom: 20px; color:#333;"></h2>
 
@@ -42,48 +67,35 @@
 // Récupère l'utilisateur connecté
 const user = sessionStorage.getItem('fc_user');
 
-// Si pas connecté → redirection vers login
 if (!user) {
   window.location.href = "login.html";
 } else {
-  // Affiche le message de bienvenue
-  document.getElementById('welcomeMessage').textContent = `👋 Bienvenue, ${user}`;
+  // Nom en haut de la sidebar
+  document.getElementById('usernameDisplay').textContent = user;
+  // Ligne sous le nom
+  document.getElementById('usernameLine').style.width = '80%';
+  document.getElementById('usernameLine').style.margin = '0 auto';
+  document.getElementById('usernameLine').style.backgroundColor = '#fff';
+  
+  // Message de bienvenue
+  document.getElementById('welcomeMessage').textContent = `Bienvenue, ${user}`;
 }
 
-// Gestion du bouton de déconnexion
+// Déconnexion
 document.getElementById('logoutBtn').addEventListener('click', () => {
   sessionStorage.removeItem('fc_user');
+  window.location.href = "login.html";
 });
 
-    // Bloquer clic droit
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-    });
-
-    // Bloquer touches pour inspecter / voir le code source
-    document.addEventListener('keydown', function(e) {
-      // F12
-      if (e.key === "F12" || e.keyCode === 123) e.preventDefault();
-
-      // Ctrl+Shift+I ou J (inspecter)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.keyCode === 73 || e.keyCode === 74)) e.preventDefault();
-
-      // Ctrl+Shift+C (inspecteur de sélection)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.keyCode === 67)) e.preventDefault();
-
-      // Ctrl+U (voir le code source)
-      if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) e.preventDefault();
-    });
-
-    // Empêche le glisser-déposer
-    document.addEventListener('dragstart', function(e) {
-      e.preventDefault();
-    });
-
-    // Empêche la sélection de texte via souris
-    document.addEventListener('selectstart', function(e) {
-      e.preventDefault();
-    });
+// Protection clic droit / touches inspecteur
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+  if(e.key === "F12" || e.keyCode === 123) e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && (e.key.toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
+});
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
 </script>
 
 </body>
