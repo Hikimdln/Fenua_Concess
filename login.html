@@ -22,6 +22,26 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #ff0000, #00b4db);
+  position: relative;
+}
+
+/* --- BOUTON RETOUR --- */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #00b4db;
 }
 
 /* --- LOGIN CARD --- */
@@ -112,6 +132,11 @@ body {
 </head>
 
 <body>
+
+  <!-- Bouton retour -->
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
+
+  <!-- Carte de connexion -->
   <div class="login-card">
     <img src="assets/logo1.png" alt="Fenua Concess" class="login-logo">
     <h1>Fenua Concess</h1>
@@ -137,7 +162,6 @@ body {
   const loginBtn = document.getElementById('loginBtn');
   loginBtn.addEventListener('click', tryLogin);
 
-  // Permet de se connecter avec Entrée
   document.addEventListener('keydown', (e) => { 
     if (e.key === 'Enter') tryLogin(); 
   });
@@ -150,23 +174,33 @@ body {
     const found = utilisateurs.find(u => u.username === user && u.password === pass);
 
     if(found){
-      // Sauvegarde dans la session
       sessionStorage.setItem('fc_user', found.username);
-
       msg.style.color = "green";
       msg.textContent = "✅ Connexion réussie !";
 
-      // Redirection avec support du ?redirect=
-      const params = new URLSearchParams(window.location.search);
-      const redirect = params.get('redirect');
+      // Redirection vers portail.html après connexion
       setTimeout(() => {
-        window.location.href = redirect ? decodeURIComponent(redirect) : 'index.html';
+        window.location.href = 'portail.html';
       }, 700);
     } else {
       msg.style.color = "red";
       msg.textContent = "❌ Identifiant ou mot de passe incorrect";
     }
   }
+
+  // Bloquer clic droit
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+  // Bloquer touches inspecteur / code source
+  document.addEventListener('keydown', function(e) {
+    if (e.key === "F12" || e.keyCode === 123) e.preventDefault();
+    if (e.ctrlKey && e.shiftKey && (['I','J','C'].includes(e.key.toUpperCase()) || [73,74,67].includes(e.keyCode))) e.preventDefault();
+    if (e.ctrlKey && (e.key.toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
+  });
+
+  document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+  document.addEventListener('selectstart', function(e) { e.preventDefault(); });
   </script>
+
 </body>
 </html>

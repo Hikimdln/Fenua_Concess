@@ -3,57 +3,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Accueil - Fenua Concess</title>
+<title>Fenua Concess - Accueil</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/png" href="assets/logo1.png">
-<script src="auth.js"></script>
-</head>
+<style>
+/* --- Styles pour la présentation --- */
+.presentation-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
 
+.presentation-card img {
+  width: 50%;
+  max-width: 300px;
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto; /* Centre l'image dans son bloc */
+}
+
+.presentation-card .presentation-text {
+  width: 50%;
+  min-width: 250px;
+}
+
+.presentation-card .presentation-text h3 {
+  margin-bottom: 15px;
+  color: #ff0000;
+}
+
+.presentation-card .presentation-text p {
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
+
+.presentation-card .presentation-text a {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.presentation-card .presentation-text a:hover {
+  background: #00b4db;
+}
+
+/* --- Responsive --- */
+@media (max-width:800px) {
+  .presentation-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .presentation-card img,
+  .presentation-card .presentation-text {
+    width: 100%;
+  }
+}
+</style>
+</head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
   <h2>Fenua Concess</h2>
   <a href="index.html">Accueil</a>
-  <a href="catalogue.html">Catalogue</a>
-  <a href="factures.html">Factures</a>
-  <a href="login.html" class="logout" id="logoutBtn">Déconnexion</a>
+  <a href="catalogue_p.html">Catalogue</a>
+  <a href="#evenements">Événements</a>
+  <a href="login.html" class="logout">Se connecter</a>
 </div>
 
-<header>Portail Interne</header>
+<!-- Header -->
+<header>Fenua Concess - Accueil</header>
 
+<!-- Main content -->
 <div class="main-content">
-  <h2 id="welcomeMessage" style="margin-bottom: 20px; color:#333;"></h2>
 
-  <div class="cards">
-    <div class="card">
-      <h3>Catalogue</h3>
-      <p>Consultez le catalogue.</p>
-      <a href="catalogue.html">Voir</a>
+  <!-- Présentation -->
+  <section id="presentation" class="cards">
+    <div class="card presentation-card">
+      <img src="assets/logo1.png" alt="Fenua Concess">
+      <div class="presentation-text">
+        <h3>Bienvenue chez Fenua Concess</h3>
+        <p>Découvrez nos véhicules neufs et d'occasion de qualité, avec un service client irréprochable. Venez découvrir notre large choix et profitez de nos conseils personnalisés.</p>
+        <a href="catalogue_p.html">Voir le catalogue</a>
+      </div>
     </div>
-    <div class="card">
-      <h3>Factures</h3>
-      <p>Créer ou envoyer une facture.</p>
-      <a href="factures.html">Accéder</a>
-    </div>
-  </div>
+  </section>
+
+  <!-- Événements -->
+  <section id="evenements">
+    <h2 style="text-align:center; color:#ff0000; margin-bottom:20px;">Événements à venir</h2>
+    <div class="cards" id="evenements-list"></div>
+  </section>
+
 </div>
 
 <script>
-// Récupère l'utilisateur connecté
-const user = sessionStorage.getItem('fc_user');
+// Événements
+const evenements = [
+  {titre: "Portes ouvertes", date: "2025-12-10", lieu: "Showroom", desc: "Découvrez nos nouveautés"},
+  {titre: "Essai gratuit", date: "2025-12-15", lieu: "Parking", desc: "Testez nos véhicules"}
+];
 
-// Si pas connecté → redirection vers login
-if (!user) {
-  window.location.href = "login.html";
-} else {
-  // Affiche le message de bienvenue
-  document.getElementById('welcomeMessage').textContent = `👋 Bienvenue, ${user}`;
-}
-
-// Gestion du bouton de déconnexion
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  sessionStorage.removeItem('fc_user');
+const list = document.getElementById('evenements-list');
+evenements.forEach(ev => {
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.innerHTML = `<h3>${ev.titre}</h3>
+                   <p>${ev.date} - ${ev.lieu}</p>
+                   <p>${ev.desc}</p>`;
+  list.appendChild(div);
 });
+
+// Bloquer clic droit et touches inspecteur
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+  if(e.key === "F12" || e.keyCode === 123) e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && (e.key.toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
+});
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
 </script>
 
 </body>

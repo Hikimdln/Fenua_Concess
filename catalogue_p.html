@@ -3,46 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalogue - Fenua Concess</title>
+<title>Catalogue Public - Fenua Concess</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/png" href="assets/logo1.png">
-<script src="auth.js"></script>
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
   <h2>Fenua Concess</h2>
-  <a href="portail.html">Accueil</a>
-  <a href="catalogue.html">Catalogue</a>
-  <a href="factures.html">Factures</a>
-  <a href="login.html" class="logout">Déconnexion</a>
+  <a href="index.html">Accueil</a>
+  <a href="catalogue_p.html">Catalogue</a>
+  <a href="#evenements">Événements</a>
+  <a href="login.html" class="logout">Se connecter</a>
 </div>
 
-<header>Catalogue des véhicules</header>
+<!-- Header -->
+<header>Fenua Concess - Catalogue</header>
 
+<!-- Main content -->
 <div class="main-content">
-  <button class="back-btn" onclick="window.location.href='portail.html'">⬅ Retour</button>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
 
   <table id="catalogueTable">
     <thead>
       <tr>
         <th>Véhicule</th>
-        <th>Prix usine</th>
         <th>Prix vente</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
+
 </div>
 
 <button id="scrollTopBtn" title="Remonter en haut">↑</button>
 
 <script>
-// Lecture CSV
+// Lecture du CSV
 fetch('catalogue.csv')
   .then(res => res.text())
   .then(data => {
-    const rows = data.split('\n').slice(1);
+    const rows = data.split('\n').slice(1); // Ignore header
     const tbody = document.querySelector('#catalogueTable tbody');
     let currentCategory = '';
 
@@ -50,24 +53,28 @@ fetch('catalogue.csv')
       if(row.trim() === '') return;
       const cols = row.split(';').map(c => c.trim());
 
+      // Catégorie
       if(cols[0] && !cols[1] && !cols[2]){
         currentCategory = cols[0];
         const tr = document.createElement('tr');
         const td = document.createElement('td');
-        td.colSpan = 3;
+        td.colSpan = 2;
         td.textContent = currentCategory;
         td.style.fontWeight = 'bold';
         td.style.backgroundColor = '#f0f0f0';
         tr.appendChild(td);
         tbody.appendChild(tr);
-      } else if(cols[0]){
+      } 
+      // Véhicule
+      else if(cols[0]){
         const tr = document.createElement('tr');
         tr.title = currentCategory;
-        cols.forEach(col => {
-          const td = document.createElement('td');
-          td.textContent = col || '-';
-          tr.appendChild(td);
-        });
+        const tdNom = document.createElement('td');
+        tdNom.textContent = cols[0];
+        const tdPrix = document.createElement('td');
+        tdPrix.textContent = cols[2] || '-'; // Prix vente uniquement
+        tr.appendChild(tdNom);
+        tr.appendChild(tdPrix);
         tbody.appendChild(tr);
       }
     });
@@ -86,35 +93,16 @@ window.onscroll = function() {
 scrollBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
-    // Bloquer clic droit
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-    });
 
-    // Bloquer touches pour inspecter / voir le code source
-    document.addEventListener('keydown', function(e) {
-      // F12
-      if (e.key === "F12" || e.keyCode === 123) e.preventDefault();
-
-      // Ctrl+Shift+I ou J (inspecter)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.keyCode === 73 || e.keyCode === 74)) e.preventDefault();
-
-      // Ctrl+Shift+C (inspecteur de sélection)
-      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.keyCode === 67)) e.preventDefault();
-
-      // Ctrl+U (voir le code source)
-      if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) e.preventDefault();
-    });
-
-    // Empêche le glisser-déposer
-    document.addEventListener('dragstart', function(e) {
-      e.preventDefault();
-    });
-
-    // Empêche la sélection de texte via souris
-    document.addEventListener('selectstart', function(e) {
-      e.preventDefault();
-    });
+// Bloquer clic droit et touches inspecteur
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+  if(e.key === "F12" || e.keyCode === 123) e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && (e.key.toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
+});
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
 </script>
 
 </body>

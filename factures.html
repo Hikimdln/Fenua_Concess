@@ -29,7 +29,7 @@ form#factureForm {
 
 <div class="sidebar">
   <h2>Fenua Concess</h2>
-  <a href="index.html">Accueil</a>
+  <a href="portail.html">Accueil</a>
   <a href="catalogue.html">Catalogue</a>
   <a href="factures.html">Factures</a>
   <a href="#" class="logout" id="logoutBtn">Déconnexion</a>
@@ -39,7 +39,7 @@ form#factureForm {
 
 <div class="main-content">
   <div style="width:100%;">
-    <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
+    <button class="back-btn" onclick="window.location.href='portail.html'">⬅ Retour</button>
 
     <form id="factureForm">
       <label for="client">Nom du client :</label>
@@ -488,6 +488,35 @@ window.onscroll = function() {
 scrollBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+    // Bloquer clic droit
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // Bloquer touches pour inspecter / voir le code source
+    document.addEventListener('keydown', function(e) {
+      // F12
+      if (e.key === "F12" || e.keyCode === 123) e.preventDefault();
+
+      // Ctrl+Shift+I ou J (inspecter)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.keyCode === 73 || e.keyCode === 74)) e.preventDefault();
+
+      // Ctrl+Shift+C (inspecteur de sélection)
+      if (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.keyCode === 67)) e.preventDefault();
+
+      // Ctrl+U (voir le code source)
+      if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) e.preventDefault();
+    });
+
+    // Empêche le glisser-déposer
+    document.addEventListener('dragstart', function(e) {
+      e.preventDefault();
+    });
+
+    // Empêche la sélection de texte via souris
+    document.addEventListener('selectstart', function(e) {
+      e.preventDefault();
+    });
 </script>
 </body>
 </html>
