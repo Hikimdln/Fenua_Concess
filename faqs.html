@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenua Concess - FAQ</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="assets/logo1.png">
+<style>
+/* --- Styles spécifiques pour le FAQ --- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  flex: 1 1 300px;
+  max-width: 500px;
+}
+
+.card form input,
+.card form textarea,
+.card form button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.card form button {
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card form button:hover {
+  background: #00b4db;
+}
+
+/* Responsive */
+@media (max-width:800px) {
+  .card {
+    max-width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h2>Fenua Concess</h2>
+  <a href="index.html">Accueil</a>
+  <a href="catalogue_p.html">Catalogue</a>
+  <a href="#evenements">Événements</a>
+  <a href="faqs.html">FAQS</a>
+  <a href="login.html" class="logout">Se connecter</a>
+</div>
+
+<!-- Header -->
+<header>Fenua Concess - FAQ</header>
+
+<!-- Main content -->
+<div class="main-content">
+  <section id="faq">
+    <h2 style="text-align:center; color:#ff0000; margin-bottom:20px;">FAQ / Posez vos questions</h2>
+    <div class="cards">
+      <div class="card">
+        <form id="faqForm">
+          <input type="text" id="name" name="name" placeholder="Votre nom" required>
+          <input type="tel" id="tel" name="tel" placeholder="Votre téléphone Fenualand" required>
+          <input type="text" id="email" name="email" placeholder="Votre email (discord) - optionnel">
+          <textarea id="question" name="question" placeholder="Votre question" rows="5" required></textarea>
+          <button type="submit">Envoyer</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// Webhook Discord
+const webhookURL = "https://discord.com/api/webhooks/1434730882010321001/FR8kKdAngHmnspKRHxdq_4Koc9k3_TTmBW0EUuIyhDg0SkDAsFlZ7ymjfmHkUkNlKA8m"; // Remplace par ton webhook
+
+document.getElementById('faqForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const tel = document.getElementById('tel').value;
+  const email = document.getElementById('email').value || "Non fourni";
+  const question = document.getElementById('question').value;
+
+  const webhookPayload = {
+    username: "Fenua Concess FAQ",
+    avatar_url: "https://i.imgur.com/TON_LOGO.png", // Remplace par ton logo si tu veux
+    embeds: [
+      {
+        title: "📩 Nouvelle question FAQ",
+        color: 16711680, // Rouge (#ff0000)
+        fields: [
+          { name: "🙍 Nom", value: name, inline: true },
+          { name: "📞 Téléphone", value: tel, inline: true },
+          { name: "✉️ Email (discord)", value: email, inline: false },
+          { name: "❓ Question", value: question, inline: false }
+        ],
+        timestamp: new Date()
+      }
+    ]
+  };
+
+  try {
+    await fetch(webhookURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(webhookPayload)
+    });
+    alert("Votre question a été envoyée !");
+    document.getElementById('faqForm').reset();
+  } catch(err) {
+    alert("Erreur lors de l'envoi, veuillez réessayer.");
+    console.error(err);
+  }
+});
+
+// Bloquer clic droit et touches inspecteur
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+  if(e.key === "F12" || e.keyCode === 123) e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && (e.key.toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
+});
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+</script>
+
+</body>
+</html>

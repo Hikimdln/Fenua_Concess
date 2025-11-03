@@ -91,7 +91,7 @@
   <a href="portail.html">Accueil</a>
   <a href="catalogue.html">Catalogue</a>
   <a href="factures.html">Factures</a>
-  <a href="login.html" class="logout" id="logoutBtn">Déconnexion</a>
+  <a href="index.html" class="logout" id="logoutBtn">Déconnexion</a>
 </div>
 
 <header>Portail Interne - Catalogue des véhicules</header>
@@ -125,7 +125,7 @@ if(user){
 // --- Bouton Déconnexion ---
 document.getElementById('logoutBtn').addEventListener('click', () => {
   sessionStorage.removeItem('fc_user');
-  window.location.href = 'login.html';
+  window.location.href = 'index.html';
 });
 
 // --- Lecture CSV ---
