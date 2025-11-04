@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenua Concess - Accueil</title>
+<link rel="icon" type="image/png" href="assets/logo1.png">
+<style>
+/* --- Fond flouté --- */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('assets/background2.png') no-repeat center center / cover;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 220px;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  padding: 20px 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.sidebar h2 { color: #fff; text-align: center; margin-bottom: 20px; }
+.sidebar a { display: block; color: #fff; text-decoration: none; margin: 10px 0; padding: 8px 10px; border-radius: 5px; transition: 0.3s; }
+.sidebar a:hover { background: rgba(255,255,255,0.1); }
+
+/* --- Bouton déconnexion --- */
+.sidebar .logout {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  text-align: center;
+  background: #ff0000;
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.sidebar .logout:hover { background: #00b4db; }
+
+/* --- Header --- */
+header {
+  margin-left: 220px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-size: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  box-sizing: border-box;
+}
+
+/* --- Main content --- */
+.main-content {
+  margin-left: 220px;
+  padding: 80px 20px 30px 20px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  text-align: center;
+}
+
+/* --- Cartes effet verre dépoli --- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  text-align: center; /* centre le texte des cartes */
+}
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  width: 250px;
+  padding: 15px;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  color: #fff; /* texte blanc */
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.05);
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+}
+.card h3, .card p { color: #fff; margin: 5px 0; }
+
+/* --- Image et lien centrés --- */
+.card img {
+  display: block;
+  margin: 0 auto 10px auto;
+  width: 130px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.card a {
+  display: inline-block;
+  margin: 10px auto 0 auto;
+  padding: 5px 10px;
+  background: #ff0000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+}
+.card a:hover { background: #00b4db; }
+
+/* --- Nom utilisateur --- */
+#userBlock { text-align: center; margin-bottom: 20px; }
+#usernameDisplay { font-weight: 900; font-size: 1.3rem; margin-bottom: 5px; }
+#usernameLine { height: 2px; background: #fff; width: 80%; margin: 0 auto 10px auto; }
+
+/* --- Scroll top --- */
+#scrollTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 25px; right: 25px;
+  z-index: 99;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.3s;
+}
+#scrollTopBtn:hover { background-color: #00b4db; }
+
+/* --- Responsive --- */
+@media (max-width: 800px) {
+  .main-content { margin-left: 0; padding: 80px 10px 20px 10px; }
+  header { margin-left: 0; }
+  .cards { justify-content: center; }
+  .sidebar .logout { position: relative; bottom: auto; transform: none; width: 100%; margin-top: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div id="userBlock">
+    <div id="usernameDisplay"></div>
+  </div>
+  <h2>Fenua Concess</h2>
+  <a href="index.html">Accueil</a>
+  <a href="catalogue_p.html">Catalogue</a>
+  <a href="#evenements">Événements</a>
+  <a href="faqs.html">FAQS</a>
+  <a href="equipe_p.html">L'équipe</a>
+  <a href="login.html" class="logout">Se connecter</a>
+</div>
+
+<header>Fenua Concess - Accueil</header>
+
+<div class="main-content">
+
+  <!-- Présentation -->
+  <div class="cards">
+    <div class="card">
+      <img src="assets/logo1.png" alt="Fenua Concess">
+      <h3>Bienvenue chez Fenua Concess</h3>
+      <p>Découvrez nos véhicules de qualité avec un service client irréprochable.</p>
+      <a href="catalogue_p.html">Voir le catalogue</a>
+    </div>
+  </div>
+
+  <!-- Événements -->
+  <h2 style="color:#fff; margin-top:40px;">Événements à venir</h2>
+  <div class="cards" id="evenements-list"></div>
+
+</div>
+
+<button id="scrollTopBtn" title="Remonter en haut">↑</button>
+
+<script>
+// Affichage utilisateur
+const user = sessionStorage.getItem('fc_user');
+if(user){ document.getElementById('usernameDisplay').textContent = user; }
+
+// Événements
+const evenements = [
+  {titre: "À venir", date: "à définir", lieu: "à définir", desc: "à définir"},
+];
+const list = document.getElementById('evenements-list');
+evenements.forEach(ev => {
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.innerHTML = `<h3>${ev.titre}</h3>
+                   <p>${ev.date} - ${ev.lieu}</p>
+                   <p>${ev.desc}</p>`;
+  list.appendChild(div);
+});
+
+// Scroll top
+const scrollBtn=document.getElementById('scrollTopBtn');
+window.onscroll=()=>{ scrollBtn.style.display=(document.body.scrollTop>100 || document.documentElement.scrollTop>100)?"block":"none"; };
+scrollBtn.addEventListener('click',()=>{ window.scrollTo({top:0, behavior:'smooth'}); });
+
+// Bloquer clic droit / inspecteur
+document.addEventListener('contextmenu', e=>e.preventDefault());
+document.addEventListener('keydown', e=>{
+  if(e.key==="F12"||e.keyCode===123) e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && (e.key.toUpperCase()==='U'||e.keyCode===85)) e.preventDefault();
+});
+document.addEventListener('dragstart',e=>e.preventDefault());
+document.addEventListener('selectstart',e=>e.preventDefault());
+</script>
+
+</body>
+</html>

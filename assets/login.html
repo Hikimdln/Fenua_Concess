@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion - Fenua Concess</title>
+<link rel="icon" type="image/png" href="assets/logo1.png">
+
+<style>
+/* --- RESET --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- BODY --- */
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff0000, #00b4db);
+  position: relative;
+}
+
+/* --- BOUTON RETOUR --- */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #00b4db;
+}
+
+/* --- LOGIN CARD --- */
+.login-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.login-logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.login-card h1 {
+  margin-bottom: 5px;
+  color: #ff0000;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.login-subtitle {
+  margin-bottom: 25px;
+  font-size: 16px;
+  color: #555;
+}
+
+/* --- INPUTS --- */
+.login-card input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.login-card input:focus {
+  border-color: #ff0000;
+  outline: none;
+  box-shadow: 0 0 8px rgba(255,0,0,0.3);
+}
+
+/* --- BUTTON --- */
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  background: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.login-card button:hover {
+  background: #00b4db;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* --- MESSAGE --- */
+#message {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* --- ANIMATION --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE --- */
+@media(max-width:500px){
+  .login-card { padding: 30px 20px; }
+  .login-logo { width: 100px; }
+}
+</style>
+</head>
+
+<body>
+
+  <!-- Bouton retour -->
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
+
+  <!-- Carte de connexion -->
+  <div class="login-card">
+    <img src="assets/logo1.png" alt="Fenua Concess" class="login-logo">
+    <h1>Fenua Concess</h1>
+    <p class="login-subtitle">Connexion interne</p>
+
+    <input type="text" id="username" placeholder="Nom d'utilisateur" autocomplete="username">
+    <input type="password" id="password" placeholder="Mot de passe" autocomplete="current-password">
+    <button id="loginBtn">Se connecter</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+  // --- Liste des utilisateurs ---
+  const utilisateurs = [
+    { username: "admin", password: "P@ssword" },
+    { username: "FenuaConcess", password: "FenuaConcess" },
+    { username: "Adrian", password: "adrian"},
+    { username: "Reyna", password: "mdp1" },
+    { username: "Shamuel", password: "mdp2" },
+    { username: "Amaru", password: "mdp3" },
+    { username: "Tetsidee", password: "mdp4" },
+    { username: "Malik", password: "MalikCaerter20061998" }
+  ];
+
+  const loginBtn = document.getElementById('loginBtn');
+  loginBtn.addEventListener('click', tryLogin);
+
+  document.addEventListener('keydown', (e) => { 
+    if (e.key === 'Enter') tryLogin(); 
+  });
+
+  function tryLogin(){
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const msg = document.getElementById('message');
+
+    const found = utilisateurs.find(u => u.username === user && u.password === pass);
+
+    if(found){
+      sessionStorage.setItem('fc_user', found.username);
+      msg.style.color = "green";
+      msg.textContent = "✅ Connexion réussie !";
+
+      // Redirection vers portail.html après connexion
+      setTimeout(() => {
+        window.location.href = 'portail.html';
+      }, 700);
+    } else {
+      msg.style.color = "red";
+      msg.textContent = "❌ Identifiant ou mot de passe incorrect";
+    }
+  }
+
+  // Bloquer clic droit
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+  // Bloquer touches inspecteur / code source
+  document.addEventListener('keydown', function(e) {
+    if (e.key === "F12" || e.keyCode === 123) e.preventDefault();
+    if (e.ctrlKey && e.shiftKey && (['I','J','C'].includes(e.key.toUpperCase()) || [73,74,67].includes(e.keyCode))) e.preventDefault();
+    if (e.ctrlKey && (e.key.toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
+  });
+
+  document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+  document.addEventListener('selectstart', function(e) { e.preventDefault(); });
+  </script>
+
+</body>
+</html>
