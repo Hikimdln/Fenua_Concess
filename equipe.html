@@ -6,32 +6,202 @@
 <title>Équipe - Fenua Concess (Interne)</title>
 <link rel="icon" type="image/png" href="assets/logo1.png">
 <style>
-body::before{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:url('assets/background2.png') no-repeat center center / cover;filter:blur(5px);z-index:-1;}
-body{margin:0;padding:0;font-family:Arial,sans-serif;color:#fff;position:relative;z-index:1;}
-.sidebar{position:fixed;top:0;left:0;width:220px;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);padding:20px 10px;box-sizing:border-box;overflow-y:auto;}
-.sidebar h2{color:#fff;text-align:center;margin-bottom:20px;}
-.sidebar a{display:block;color:#fff;text-decoration:none;margin:10px 0;padding:8px 10px;border-radius:5px;transition:0.3s;}
+body::before {
+  content:"";
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:url('assets/background2.png') no-repeat center center / cover;
+  filter:blur(5px);
+  z-index:-1;
+}
+body {
+  margin:0; padding:0;
+  font-family:Arial,sans-serif;
+  color:#fff;
+  position:relative;
+  z-index:1;
+}
+.sidebar {
+  position:fixed; top:0; left:0;
+  width:220px; height:100%;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px);
+  padding:20px 10px;
+  box-sizing:border-box;
+  overflow-y:auto;
+}
+.sidebar h2{ color:#fff; text-align:center; margin-bottom:20px;}
+.sidebar a{
+  display:block;
+  color:#fff;
+  text-decoration:none;
+  margin:10px 0;
+  padding:8px 10px;
+  border-radius:5px;
+  transition:0.3s;
+}
 .sidebar a:hover{background:rgba(255,255,255,0.1);}
-.sidebar .logout { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); text-align: center; background: #ff0000; color: #fff; padding: 10px 0; border-radius: 6px; transition: 0.3s; }
+.sidebar .logout {
+  position:absolute;
+  bottom:20px; left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 40px);
+  text-align:center;
+  background:#ff0000;
+  color:#fff;
+  padding:10px 0;
+  border-radius:6px;
+  transition:0.3s;
+}
 .sidebar .logout:hover{background:#00b4db;}
-header{margin-left:220px;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);color:#fff;text-align:center;padding:15px;font-size:1.5rem;border-bottom:1px solid rgba(255,255,255,0.2);box-sizing:border-box;}
-.main-content{margin-left:220px;padding:80px 20px 30px 20px;box-sizing:border-box;min-height:100vh;}
-.back-btn{margin-bottom:15px;padding:10px 20px;background:#ff0000;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;transition:0.3s;}
+header{
+  margin-left:220px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(6px);
+  color:#fff;
+  text-align:center;
+  padding:15px;
+  font-size:1.5rem;
+  border-bottom:1px solid rgba(255,255,255,0.2);
+  box-sizing:border-box;
+}
+.main-content{
+  margin-left:220px;
+  padding:80px 20px 30px 20px;
+  box-sizing:border-box;
+  min-height:100vh;
+}
+.back-btn{
+  margin-bottom:15px;
+  padding:10px 20px;
+  background:#ff0000;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
+}
 .back-btn:hover{background:#00b4db;}
-.cards{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;}
-.card{background:rgba(255,255,255,0.1);backdrop-filter:blur(6px);border-radius:15px;border:1px solid rgba(255,255,255,0.2);box-shadow:0 4px 10px rgba(0,0,0,0.2);width:180px;text-align:center;padding:10px;transition:transform 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;}
-.card:hover{transform:translateY(-5px) scale(1.05);background:rgba(255,255,255,0.15);box-shadow:0 6px 14px rgba(0,0,0,0.3);}
-.card img,.card .no-image{width:130px;height:130px;object-fit:cover;margin-bottom:8px;border-radius:50%;}
-.card h3, .card p, .card .no-image {
-  color: #ffffff;
-  font-weight: bold;
+.cards{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  justify-content:center;
+}
+.card{
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(6px);
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  width:180px;
+  text-align:center;
+  padding:10px;
+  transition:transform 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;
+  cursor:pointer;
+}
+.card:hover{
+  transform:translateY(-5px) scale(1.05);
+  background:rgba(255,255,255,0.15);
+  box-shadow:0 6px 14px rgba(0,0,0,0.3);
+}
+.card img{
+  width:130px; height:130px;
+  object-fit:cover;
+  margin-bottom:8px;
+  border-radius:50%;
+}
+.card h3{
+  color:#fff;
+  font-weight:bold;
+  margin:5px 0;
+}
+.card .see-more{
+  font-size:0.9rem;
+  color:#ffffff;
+  margin-top:4px;
+}
+.card .see-more:hover{
+  text-decoration:underline;
 }
 #userBlock{text-align:center;margin-bottom:20px;}
 #usernameDisplay{font-weight:900;font-size:1.3rem;margin-bottom:5px;}
 #usernameLine{height:2px;background:#fff;width:80%;margin:0 auto 10px auto;}
-#scrollTopBtn{display:none;position:fixed;bottom:25px;right:25px;z-index:99;background-color:#f44336;color:white;border:none;border-radius:50%;padding:10px 15px;cursor:pointer;font-size:18px;transition:0.3s;}
+#scrollTopBtn{
+  display:none;
+  position:fixed;
+  bottom:25px; right:25px;
+  z-index:99;
+  background-color:#f44336;
+  color:white;
+  border:none;
+  border-radius:50%;
+  padding:10px 15px;
+  cursor:pointer;
+  font-size:18px;
+  transition:0.3s;
+}
 #scrollTopBtn:hover{background-color:#00b4db;}
-@media(max-width:800px){.main-content{margin-left:0;padding:80px 10px 20px 10px;}header{margin-left:0;}.cards{justify-content:center;}.sidebar .logout{position:relative;bottom:auto;transform:none;width:100%;margin-top:20px;}}
+/* Modal */
+.modal-bg{
+  display:none;
+  position:fixed; top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+.modal{
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(6px);
+  border-radius:15px;
+  width:80%;
+  max-width:700px;
+  display:flex;
+  overflow:hidden;
+  color:#fff;
+  max-height:400px;
+}
+.modal-left{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+.modal-left img{
+  width:100%;
+  height:auto;
+  border-radius:10px;
+}
+.modal-right{
+  flex:2;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  overflow-y:auto;
+}
+.modal-right h2{margin-top:0;}
+.close-btn{
+  position:absolute; top:20px; right:30px;
+  font-size:25px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
+}
+@media(max-width:800px){
+  .main-content{margin-left:0;padding:80px 10px 20px 10px;}
+  header{margin-left:0;}
+  .cards{justify-content:center;}
+  .sidebar .logout{position:relative;bottom:auto;transform:none;width:100%;margin-top:20px;}
+  .modal{flex-direction:column; max-height:none;}
+  .modal-left,.modal-right{flex:none;width:100%;}
+  .modal-left img{width:50%; margin:0 auto;}
+}
 </style>
 </head>
 <body>
@@ -55,6 +225,19 @@ header{margin-left:220px;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);co
 
 <button id="scrollTopBtn" title="Remonter en haut">↑</button>
 
+<!-- Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-left"><img src="" alt="" id="modalImg"></div>
+    <div class="modal-right">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2 id="modalName"></h2>
+      <h4 id="modalRole"></h4>
+      <p id="modalDesc"></p>
+    </div>
+  </div>
+</div>
+
 <script>
 // Vérification login
 const user=sessionStorage.getItem('fc_user');
@@ -65,49 +248,44 @@ else{window.location.href='login.html';}
 document.getElementById('logoutBtn').addEventListener('click',()=>{sessionStorage.removeItem('fc_user');window.location.href='index.html';});
 
 const teamMembers = [
-  {
-    name: "Reyna Cross",
-    role: "Patronne Fenua Concess",
-    desc: "Impossible de lui résister - même ton moteur cale quand elle passe.",
-    img: "assets/team/reyna.png"
-  },
-  {
-    name: "Sham Muel",
-    role: "Co-Patron Fenua Concess",
-    desc: "...",
-    img: "assets/team/shamuel.png"
-  },
-  {
-    name: "Amaru Shakur",
-    role: "Vendeur",
-    desc: "...",
-    img: "assets/team/amaru.png"
-  },
-  {
-    name: "Malik Carter",
-    role: "Vendeur",
-    desc: "...",
-    img: "assets/team/malik.png"
-  },
-  {
-    name: "Adrian Voss",
-    role: "Vendeur",
-    desc: "Son objectif : que chaque visiteur reparte satisfait et en confiance.",
-    img: "assets/team/adrian.jpg"
-  }
+  {name:"Reyna Cross", role:"Patronne - Fenua Concess", desc:"Impossible de lui résister - même ton moteur cale quand elle passe.", img:"assets/team/reyna.png"},
+  {name:"Sham Muel", role:"Co-Patron - Fenua Concess", desc:"...", img:"assets/team/shamuel.png"},
+  {name:"Amaru Shakur", role:"Vendeur expérimenté et passionné par les voitures sportives - Fenua Concess", desc:"Je suis un vendeur expérimenté et souvent présent, car j’aime mon métier ! Je fais beaucoup d’heures supplémentaires et je suis efficace, car je connais de tête le prix de nombreux véhicules, ce qui me permet de réaliser rapidement les factures. Je suis à l’écoute et je ne cherche pas à m’imposer. Mes passions sont les voitures de sport, notamment les BMW telles que la M2 ou la M4 Compétition.", img:"assets/team/amaru.png"},
+  {name:"Malik Carter", role:"Vendeur - Fenua Concess", desc:"Un vendeur qui accélère vos envies et freine vos doutes.", img:"assets/team/malik.png"},
+  {name:"Adrian Voss", role:"Vendeur - Fenua Concess", desc:"Son objectif : que chaque visiteur reparte satisfait et en confiance.", img:"assets/team/adrian.jpg"}
 ];
 
 const container=document.getElementById('teamContainer');
+const modalBg=document.getElementById('modalBg');
+const modalImg=document.getElementById('modalImg');
+const modalName=document.getElementById('modalName');
+const modalRole=document.getElementById('modalRole');
+const modalDesc=document.getElementById('modalDesc');
+const closeModal=document.getElementById('closeModal');
+
 teamMembers.forEach(member=>{
-const card=document.createElement('div'); card.className='card';
-const img=document.createElement('img'); img.src=member.img; img.alt=member.name;
-img.onerror=()=>{img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image'; card.prepend(noImg);}
-const name=document.createElement('h3'); name.textContent=member.name;
-const role=document.createElement('p'); role.textContent=member.role;
-const desc=document.createElement('p'); desc.textContent=member.desc;
-card.appendChild(img); card.appendChild(name); card.appendChild(role); card.appendChild(desc);
-container.appendChild(card);
+  const card=document.createElement('div'); card.className='card';
+  const img=document.createElement('img'); img.src=member.img; img.alt=member.name;
+  img.onerror=()=>{img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image'; card.prepend(noImg);}
+  const name=document.createElement('h3'); name.textContent=member.name;
+  const seeMore=document.createElement('div'); seeMore.className='see-more'; seeMore.textContent='Voir plus';
+  
+  card.appendChild(img);
+  card.appendChild(name);
+  card.appendChild(seeMore);
+  container.appendChild(card);
+
+  card.addEventListener('click', ()=>{
+    modalImg.src=member.img;
+    modalName.textContent=member.name;
+    modalRole.textContent=member.role;
+    modalDesc.textContent=member.desc;
+    modalBg.style.display='flex';
+  });
 });
+
+closeModal.addEventListener('click', ()=>{modalBg.style.display='none';});
+modalBg.addEventListener('click', e=>{if(e.target===modalBg) modalBg.style.display='none';});
 
 // Scroll top
 const scrollBtn=document.getElementById('scrollTopBtn');
@@ -117,9 +295,9 @@ scrollBtn.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'
 // Protection clic droit
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('keydown',e=>{
-if(e.key==="F12"||e.keyCode===123)e.preventDefault();
-if(e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key.toUpperCase()))e.preventDefault();
-if(e.ctrlKey&&(e.key.toUpperCase()==='U'||e.keyCode===85))e.preventDefault();
+  if(e.key==="F12"||e.keyCode===123)e.preventDefault();
+  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
+  if(e.ctrlKey && (e.key.toUpperCase()==='U'||e.keyCode===85)) e.preventDefault();
 });
 document.addEventListener('dragstart',e=>e.preventDefault());
 document.addEventListener('selectstart',e=>e.preventDefault());

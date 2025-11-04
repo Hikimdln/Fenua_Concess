@@ -16,7 +16,6 @@ body::before {
   filter: blur(5px);
   z-index: -1;
 }
-
 body {
   margin: 0;
   padding: 0;
@@ -39,7 +38,7 @@ body {
   overflow-y: auto;
 }
 .sidebar h2 { color: #fff; text-align: center; margin-bottom: 20px; }
-.sidebar a { display: block; color: #ffffff; text-decoration: none; margin: 10px 0; padding: 8px 10px; border-radius: 5px; transition: 0.3s; }
+.sidebar a { display: block; color: #fff; text-decoration: none; margin: 10px 0; padding: 8px 10px; border-radius: 5px; transition: 0.3s; }
 .sidebar a:hover { background: rgba(255,255,255,0.1); }
 .sidebar .logout { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); text-align: center; background: #ff0000; color: #fff; padding: 10px 0; border-radius: 6px; transition: 0.3s; }
 .sidebar .logout:hover { background: #00b4db; }
@@ -96,6 +95,7 @@ header {
   width: 180px;
   text-align: center;
   padding: 10px;
+  cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 .card:hover {
@@ -103,30 +103,76 @@ header {
   background: rgba(255,255,255,0.15);
   box-shadow: 0 6px 14px rgba(0,0,0,0.3);
 }
-
-.card h3, .card p, .card .no-image {
-  color: #ffffff;
+.card h3 {
+  color: #fff;
   font-weight: bold;
+  margin: 5px 0;
 }
-
-.card img, .card .no-image {
+.card img {
   width: 130px;
   height: 130px;
   object-fit: cover;
   margin-bottom: 8px;
   border-radius: 50%;
 }
-
-.card a {
-  display: inline-block;
-  padding: 5px 10px;
-  background: #ff0000;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 6px;
-  margin-top: 5px;
+.card .see-more {
+  font-size: 0.9rem;
+  color: #ffffff;
+  margin-top: 4px;
 }
-.card a:hover { background: #00b4db; }
+
+/* --- Modal --- */
+.modal-bg {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal {
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  width: 80%;
+  max-width: 700px;
+  display: flex;
+  overflow: hidden;
+  color: #fff;
+  max-height: 400px;
+}
+.modal-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.modal-left img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.modal-right {
+  flex: 2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+.modal-right h2 { margin-top: 0; }
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+}
 
 /* --- Scroll top --- */
 #scrollTopBtn {
@@ -151,6 +197,9 @@ header {
   header { margin-left: 0; }
   .cards { justify-content: center; }
   .sidebar .logout { position: relative; bottom: auto; transform: none; width: 100%; margin-top: 20px; }
+  .modal {flex-direction: column; max-height: none;}
+  .modal-left, .modal-right {flex:none; width:100%;}
+  .modal-left img {width:50%; margin:0 auto;}
 }
 </style>
 </head>
@@ -175,66 +224,71 @@ header {
 
 <button id="scrollTopBtn" title="Remonter en haut">↑</button>
 
+<!-- Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-left"><img src="" alt="" id="modalImg"></div>
+    <div class="modal-right">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2 id="modalName"></h2>
+      <h4 id="modalRole"></h4>
+      <p id="modalDesc"></p>
+    </div>
+  </div>
+</div>
+
 <script>
 const teamMembers = [
-  {
-    name: "Reyna Cross",
-    role: "Patronne Fenua Concess",
-    desc: "Impossible de lui résister - même ton moteur cale quand elle passe.",
-    img: "assets/team/reyna.png"
-  },
-  {
-    name: "Sham Muel",
-    role: "Co-Patron Fenua Concess",
-    desc: "...",
-    img: "assets/team/shamuel.png"
-  },
-  {
-    name: "Amaru Shakur",
-    role: "Vendeur",
-    desc: "...",
-    img: "assets/team/amaru.png"
-  },
-  {
-    name: "Malik Carter",
-    role: "Vendeur",
-    desc: "...",
-    img: "assets/team/malik.png"
-  },
-  {
-    name: "Adrian Voss",
-    role: "Vendeur",
-    desc: "Son objectif : que chaque visiteur reparte satisfait et en confiance.",
-    img: "assets/team/adrian.jpg"
-  }
+  {name:"Reyna Cross", role:"Patronne - Fenua Concess", desc:"Impossible de lui résister - même ton moteur cale quand elle passe.", img:"assets/team/reyna.png"},
+  {name:"Sham Muel", role:"Co-Patron - Fenua Concess", desc:"...", img:"assets/team/shamuel.png"},
+  {name:"Amaru Shakur", role:"Vendeur expérimenté et passionné par les voitures sportives - Fenua Concess", desc:"Je suis un vendeur expérimenté et souvent présent, car j’aime mon métier ! Je fais beaucoup d’heures supplémentaires et je suis efficace, car je connais de tête le prix de nombreux véhicules, ce qui me permet de réaliser rapidement les factures. Je suis à l’écoute et je ne cherche pas à m’imposer. Mes passions sont les voitures de sport, notamment les BMW telles que la M2 ou la M4 Compétition.", img:"assets/team/amaru.png"},
+  {name:"Malik Carter", role:"Vendeur - Fenua Concess", desc:"Un vendeur qui accélère vos envies et freine vos doutes.", img:"assets/team/malik.png"},
+  {name:"Adrian Voss", role:"Vendeur - Fenua Concess", desc:"Son objectif : que chaque visiteur reparte satisfait et en confiance.", img:"assets/team/adrian.jpg"}
 ];
 
 const container = document.getElementById('teamContainer');
+const modalBg = document.getElementById('modalBg');
+const modalImg = document.getElementById('modalImg');
+const modalName = document.getElementById('modalName');
+const modalRole = document.getElementById('modalRole');
+const modalDesc = document.getElementById('modalDesc');
+const closeModal = document.getElementById('closeModal');
+
 teamMembers.forEach(member=>{
-  const card=document.createElement('div'); card.className='card';
-  const img=document.createElement('img'); img.src=member.img; img.alt=member.name;
-  img.onerror=()=>{img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image disponible'; card.prepend(noImg);}
-  const name=document.createElement('h3'); name.textContent=member.name;
-  const role=document.createElement('p'); role.textContent=member.role;
-  const desc=document.createElement('p'); desc.textContent=member.desc;
-  card.appendChild(img); card.appendChild(name); card.appendChild(role); card.appendChild(desc);
+  const card = document.createElement('div'); 
+  card.className='card';
+  const img = document.createElement('img'); 
+  img.src=member.img; 
+  img.alt=member.name;
+  const name = document.createElement('h3'); 
+  name.textContent=member.name;
+
+  // Voir plus
+  const seeMore = document.createElement('div');
+  seeMore.className = 'see-more';
+  seeMore.textContent = 'Voir plus';
+
+  card.appendChild(img); 
+  card.appendChild(name); 
+  card.appendChild(seeMore);
   container.appendChild(card);
+
+  card.addEventListener('click', ()=>{
+    modalImg.src = member.img;
+    modalName.textContent = member.name;
+    modalRole.textContent = member.role;
+    modalDesc.textContent = member.desc;
+    modalBg.style.display = 'flex';
+  });
 });
+
+closeModal.addEventListener('click', ()=>{modalBg.style.display='none';});
+modalBg.addEventListener('click', e=>{if(e.target===modalBg) modalBg.style.display='none';});
 
 // Scroll top
 const scrollBtn = document.getElementById('scrollTopBtn');
 window.onscroll = () => { scrollBtn.style.display = (document.body.scrollTop>100 || document.documentElement.scrollTop>100)?"block":"none"; };
 scrollBtn.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); });
-
-// Protection clic droit
-document.addEventListener('contextmenu', e=>e.preventDefault());
-document.addEventListener('keydown', e=>{
-  if(e.key==="F12" || e.keyCode===123) e.preventDefault();
-  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
-  if(e.ctrlKey && (e.key.toUpperCase()==='U' || e.keyCode===85)) e.preventDefault();
-});
-document.addEventListener('dragstart', e=>e.preventDefault());
-document.addEventListener('selectstart', e=>e.preventDefault());
 </script>
 
 </body>
