@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalogue - Fenua Concess</title>
+<title>Équipe - Fenua Concess (Public)</title>
 <link rel="icon" type="image/png" href="assets/logo1.png">
 <style>
 /* --- Fond flouté --- */
@@ -41,21 +41,7 @@ body {
 .sidebar h2 { color: #fff; text-align: center; margin-bottom: 20px; }
 .sidebar a { display: block; color: #fff; text-decoration: none; margin: 10px 0; padding: 8px 10px; border-radius: 5px; transition: 0.3s; }
 .sidebar a:hover { background: rgba(255,255,255,0.1); }
-
-/* --- Bouton déconnexion en bas --- */
-.sidebar .logout {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  text-align: center;
-  background: #ff0000;
-  color: #fff;
-  padding: 10px 0;
-  border-radius: 6px;
-  transition: 0.3s;
-}
+.sidebar .logout { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); text-align: center; background: #ff0000; color: #fff; padding: 10px 0; border-radius: 6px; transition: 0.3s; }
 .sidebar .logout:hover { background: #00b4db; }
 
 /* --- Header --- */
@@ -98,7 +84,7 @@ header {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center; /* centrage */
+  justify-content: center;
 }
 
 .card {
@@ -142,18 +128,6 @@ header {
 }
 .card a:hover { background: #00b4db; }
 
-/* --- Catégorie titre --- */
-.category-title {
-  width: 100%;
-  text-align: center;
-  font-weight: 900;
-  font-size: 1.3rem;
-  margin: 30px 0 15px 0;
-  color: #fff;
-  border-bottom: 2px solid rgba(255,255,255,0.3);
-  padding-bottom: 5px;
-}
-
 /* --- Scroll top --- */
 #scrollTopBtn {
   display: none;
@@ -188,76 +162,73 @@ header {
   <a href="catalogue.html">Catalogue</a>
   <a href="#evenements">Événements</a>
   <a href="faqs.html">FAQS</a>
-  <a href="equipe.html">L'équipe</a>
+  <a href="equipe_p.html">L'équipe</a>
   <a href="login.html" class="logout">Se connecter</a>
 </div>
 
-<header>Fenua Concess - Catalogue</header>
+<header>Notre Équipe</header>
 
 <div class="main-content">
-  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Retour</button>
-  <div id="catalogueContainer" class="cards"></div>
+  <button class="back-btn" onclick="window.history.back()">⬅ Retour</button>
+  <div id="teamContainer" class="cards"></div>
 </div>
 
 <button id="scrollTopBtn" title="Remonter en haut">↑</button>
 
 <script>
-// Lecture du CSV
-fetch('catalogue.csv')
-  .then(res => res.text())
-  .then(data => {
-    const rows = data.split('\n').slice(1);
-    const container = document.getElementById('catalogueContainer');
-    let currentCategory = '';
+const teamMembers = [
+  {
+    name: "Reyna Cross",
+    role: "Patronne Fenua Concess",
+    desc: "Impossible de lui résister — même ton moteur cale quand elle passe.",
+    img: "assets/team/reyna.png"
+  },
+  {
+    name: "Sham Muel",
+    role: "Co-Patron Fenua Concess",
+    desc: "...",
+    img: "assets/team/sham.png"
+  },
+  {
+    name: "Amaru Shakur",
+    role: "Vendeur",
+    desc: "...",
+    img: "assets/team/amaru.png"
+  },
+  {
+    name: "Adrian Voss",
+    role: "Vendeur",
+    desc: "...",
+    img: "assets/team/adrian.png"
+  }
+];
 
-    rows.forEach(row => {
-      if(!row.trim()) return;
-      const cols = row.split(';').map(c => c.trim());
+const container = document.getElementById('teamContainer');
+teamMembers.forEach(member=>{
+  const card=document.createElement('div'); card.className='card';
+  const img=document.createElement('img'); img.src=member.img; img.alt=member.name;
+  img.onerror=()=>{img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image disponible'; card.prepend(noImg);}
+  const name=document.createElement('h3'); name.textContent=member.name;
+  const role=document.createElement('p'); role.textContent=member.role;
+  const desc=document.createElement('p'); desc.textContent=member.desc;
+  card.appendChild(img); card.appendChild(name); card.appendChild(role); card.appendChild(desc);
+  container.appendChild(card);
+});
 
-      if(cols[0] && !cols[1] && !cols[2]){
-        currentCategory = cols[0];
-        const catTitle = document.createElement('div');
-        catTitle.className = 'category-title';
-        catTitle.textContent = currentCategory;
-        container.appendChild(catTitle);
-      }
-      else if(cols[0]){
-        const card=document.createElement('div');
-        card.className='card';
-
-        const img=document.createElement('img');
-        const fileName=encodeURIComponent(cols[0])+'.png';
-        img.src=`assets/car/${fileName}`;
-        img.alt=cols[0];
-        img.onerror=()=>{ img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image disponible'; card.prepend(noImg); };
-
-        const name=document.createElement('h3'); name.textContent=cols[0];
-        const price=document.createElement('p'); price.textContent=cols[2] ? `Prix: ${cols[2]}$` : '-';
-
-        card.appendChild(img);
-        card.appendChild(name);
-        card.appendChild(price);
-
-        container.appendChild(card);
-      }
-    });
-  })
-  .catch(err => console.error("Erreur lecture CSV :", err));
-
-// Scroll Top
+// Scroll top
 const scrollBtn = document.getElementById('scrollTopBtn');
 window.onscroll = () => { scrollBtn.style.display = (document.body.scrollTop>100 || document.documentElement.scrollTop>100)?"block":"none"; };
 scrollBtn.addEventListener('click', () => { window.scrollTo({top:0, behavior:'smooth'}); });
 
-// Bloquer clic droit et touches inspecteur
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
+// Protection clic droit
+document.addEventListener('contextmenu', e=>e.preventDefault());
+document.addEventListener('keydown', e=>{
   if(e.key==="F12" || e.keyCode===123) e.preventDefault();
   if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) e.preventDefault();
   if(e.ctrlKey && (e.key.toUpperCase()==='U' || e.keyCode===85)) e.preventDefault();
 });
-document.addEventListener('dragstart',e=>e.preventDefault());
-document.addEventListener('selectstart',e=>e.preventDefault());
+document.addEventListener('dragstart', e=>e.preventDefault());
+document.addEventListener('selectstart', e=>e.preventDefault());
 </script>
 
 </body>
