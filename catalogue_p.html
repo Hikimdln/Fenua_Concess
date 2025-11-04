@@ -226,7 +226,7 @@ fetch('catalogue.csv')
 
         const img=document.createElement('img');
         const fileName=encodeURIComponent(cols[0])+'.png';
-        img.src=`assets/vue/${fileName}`;
+        img.src=`assets/car/${fileName}`;
         img.alt=cols[0];
         img.onerror=()=>{ img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image disponible'; card.prepend(noImg); };
 
@@ -261,3 +261,4 @@ document.addEventListener('selectstart',e=>e.preventDefault());
 
 </body>
 </html>
+
