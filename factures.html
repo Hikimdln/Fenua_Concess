@@ -1,117 +1,255 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Factures - Fenua Concess</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue - Fenua Concess</title>
 <link rel="icon" type="image/png" href="assets/logo1.png">
 <style>
+/* --- Fond flouté --- */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('assets/background2.png') no-repeat center center / cover;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 220px;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  padding: 20px 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.sidebar h2 { 
+  color: #fff; 
+  text-align: center; 
+  margin-bottom: 20px; 
+}
+.sidebar a { 
+  display: block; 
+  color: #fff; 
+  text-decoration: none; 
+  margin: 10px 0; 
+  padding: 8px 10px; 
+  border-radius: 5px; 
+  transition: 0.3s; 
+}
+.sidebar a:hover { 
+  background: rgba(255,255,255,0.1); 
+}
+
+/* --- Bouton déconnexion en bas --- */
+.sidebar .logout {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  text-align: center;
+  background: #ff0000;
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.sidebar .logout:hover {
+  background: #00b4db;
+}
+
+/* --- Header --- */
+header {
+  margin-left: 220px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-size: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  box-sizing: border-box;
+}
+
 /* --- Main content --- */
 .main-content {
-  margin-left:220px;
-  padding:80px 30px 30px 30px;
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  min-height:100vh;
-  box-sizing:border-box;
+  margin-left: 220px;
+  padding: 80px 20px 30px 20px;
+  box-sizing: border-box;
+  min-height: 100vh;
 }
 
-/* --- Formulaire --- */
-form#factureForm {
-  width:100%;
-  max-width:600px;
-  display:flex;
-  flex-direction:column;
-}
-
-form#factureForm label {
-  margin-top:10px;
-  margin-bottom:5px;
-  font-weight:600;
-}
-
-form#factureForm input, form#factureForm select, form#factureForm button {
-  padding:10px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  font-size:16px;
-}
-
-form#factureForm button {
-  margin-top:20px;
-  background:#ff0000;
-  color:#fff;
-  border:none;
-  cursor:pointer;
-  font-weight:600;
-  transition:0.3s;
-}
-
-form#factureForm button:hover {
-  background:#00b4db;
-}
-
-/* --- Back button --- */
+/* --- Bouton retour --- */
 .back-btn {
-  margin-bottom:15px;
-  padding:10px 20px;
-  background:#ff0000;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:bold;
-  transition:0.3s;
-}
-
-.back-btn:hover {
-  background:#00b4db;
-}
-
-/* --- Sidebar user --- */
-#userBlock {
-  text-align: center;
-  padding: 20px 10px 10px 10px;
-}
-
-#usernameDisplay {
-  font-weight: 900;
-  font-size: 1.3rem;
-  margin-bottom: 5px;
-}
-
-#usernameLine {
-  height: 2px;
-  background: #fff;
-  margin-bottom: 10px;
-  width: 80%;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-/* scroll top button basic positioning */
-#scrollTopBtn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 100;
+  margin-bottom: 15px;
+  padding: 10px 20px;
   background: #ff0000;
   color: #fff;
   border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
+  border-radius: 6px;
   cursor: pointer;
-  display: none;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  font-weight: bold;
+  transition: 0.3s;
 }
-#scrollTopBtn:hover { background:#00b4db; }
+.back-btn:hover { 
+  background: #00b4db; 
+}
+
+/* --- Formulaire facture --- */
+#factureForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+  background: rgba(0,0,0,0.3);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#factureForm label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+#factureForm input,
+#factureForm select,
+#factureForm button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#factureForm input[readonly] {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+#factureForm button[type="submit"] {
+  background: #ff0000;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+#factureForm button[type="submit"]:hover {
+  background: #00b4db;
+}
+
+/* --- Cartes effet verre dépoli --- */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  width: 150px;
+  text-align: center;
+  padding: 10px;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.05);
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+}
+
+.card h3 { 
+  color: #ff0000; 
+  font-size: 1em; 
+  margin: 5px 0; 
+}
+.card p { 
+  margin: 0 0 5px 0; 
+  color: #ccc; 
+  font-weight: bold; 
+}
+.card img, .card .no-image {
+  width: 130px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  border-radius: 6px;
+}
+.card a {
+  display: inline-block;
+  padding: 5px 10px;
+  background: #ff0000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+.card a:hover { 
+  background: #00b4db; 
+}
+
+/* --- Nom utilisateur --- */
+#userBlock { text-align: center; margin-bottom: 20px; }
+#usernameDisplay { font-weight: 900; font-size: 1.3rem; margin-bottom: 5px; }
+#usernameLine { height: 2px; background: #fff; width: 80%; margin: 0 auto 10px auto; }
+
+/* --- Scroll top --- */
+#scrollTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 25px; right: 25px;
+  z-index: 99;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.3s;
+}
+#scrollTopBtn:hover { 
+  background-color: #00b4db; 
+}
+
+/* --- Responsive --- */
+@media (max-width: 800px) {
+  .main-content { 
+    margin-left: 0; 
+    padding: 20px 10px; 
+  }
+  header { margin-left: 0; }
+  #factureForm { max-width: 100%; }
+  .cards { justify-content: center; }
+  .sidebar .logout { position: relative; bottom: auto; transform: none; width: 100%; margin-top: 20px; }
+}
 </style>
-<script src="auth.js"></script>
 </head>
 <body>
 
