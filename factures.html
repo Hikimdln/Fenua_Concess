@@ -675,7 +675,7 @@ document.getElementById('factureForm').addEventListener('submit', async e=>{
 
   // --- Envoi Google Sheets ---
   try {
-    const sheetResponse = await fetch("https://script.google.com/macros/s/AKfycbwyxboz1nvvL4DXAuCCc3bgPi_pgDHRrCo9Fpear9dn0tJhcOdslR5UB1ecaeLiivLaNg/exec", {
+    const sheetResponse = await fetch("https://script.google.com/macros/s/AKfycbyXw-9A_2sAU1CB5rjFhTeD7oRzKP638jBB3oj5xjKuAEs2uSctu3TKIByyLWUGjQhtHA/exec", {
       method: "POST",
       body: JSON.stringify(payload)
     });
