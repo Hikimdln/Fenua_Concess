@@ -55,8 +55,6 @@ body {
 .sidebar a:hover { 
   background: rgba(255,255,255,0.1); 
 }
-
-/* --- Bouton déconnexion en bas --- */
 .sidebar .logout {
   position: absolute;
   bottom: 20px;
@@ -116,7 +114,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 500px;
+  max-width: 700px;
   margin: 0 auto;
   background: rgba(0,0,0,0.3);
   padding: 20px;
@@ -159,62 +157,7 @@ header {
   background: #00b4db;
 }
 
-/* --- Cartes effet verre dépoli --- */
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: flex-start;
-}
-
-.card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(6px);
-  border-radius: 15px;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  width: 150px;
-  text-align: center;
-  padding: 10px;
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-5px) scale(1.05);
-  background: rgba(255,255,255,0.15);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.3);
-}
-
-.card h3 { 
-  color: #ff0000; 
-  font-size: 1em; 
-  margin: 5px 0; 
-}
-.card p { 
-  margin: 0 0 5px 0; 
-  color: #ccc; 
-  font-weight: bold; 
-}
-.card img, .card .no-image {
-  width: 130px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 8px;
-  border-radius: 6px;
-}
-.card a {
-  display: inline-block;
-  padding: 5px 10px;
-  background: #ff0000;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 6px;
-  margin-top: 5px;
-}
-.card a:hover { 
-  background: #00b4db; 
-}
-
-/* --- Nom utilisateur --- */
+/* --- Nom utilisateur / Vendeur --- */
 #userBlock { text-align: center; margin-bottom: 20px; }
 #usernameDisplay { font-weight: 900; font-size: 1.3rem; margin-bottom: 5px; }
 #usernameLine { height: 2px; background: #fff; width: 80%; margin: 0 auto 10px auto; }
@@ -246,7 +189,6 @@ header {
   }
   header { margin-left: 0; }
   #factureForm { max-width: 100%; }
-  .cards { justify-content: center; }
   .sidebar .logout { position: relative; bottom: auto; transform: none; width: 100%; margin-top: 20px; }
 }
 </style>
@@ -274,10 +216,7 @@ header {
     <button class="back-btn" onclick="window.location.href='portail.html'">⬅ Retour</button>
 
     <form id="factureForm">
-      <label for="client">Nom du client :</label>
-      <input type="text" id="client" placeholder="Nom du client" required>
-
-      <label for="vendeur">Nom du vendeur :</label>
+      <label for="vendeur">Vendeur :</label>
       <input type="text" id="vendeur" readonly>
 
       <label for="date">Date :</label>
@@ -291,7 +230,7 @@ header {
         <option value="">-- Sélectionner une catégorie --</option>
       </select>
 
-      <label for="vehicule">Véhicule :</label>
+      <label for="vehicule">Modèle du véhicule :</label>
       <select id="vehicule" required>
         <option value="">-- Sélectionner un véhicule --</option>
       </select>
@@ -299,19 +238,34 @@ header {
       <label for="quantite">Quantité :</label>
       <input type="number" id="quantite" min="1" value="1" required>
 
-      <label for="prix">Prix unitaire :</label>
-      <input type="number" id="prix" min="0" required readonly>
+      <label for="plaque">Plaque d'immatriculation :</label>
+      <input type="text" id="plaque" placeholder="Ex: BCL 475" required>
 
-      <label for="reduction">Réduction (%) :</label>
+      <label for="operation">Type d'opération :</label>
+      <select id="operation" required>
+        <option value="Achat">Achat</option>
+        <option value="Location">Location</option>
+      </select>
+
+      <label for="proprietaire">Identité du propriétaire :</label>
+      <input type="text" id="proprietaire" placeholder="Nom complet" required>
+
+      <label for="prixUsine">Prix d'usine :</label>
+      <input type="number" id="prixUsine" readonly>
+
+      <label for="prix">Prix (TTC) :</label>
+      <input type="number" id="prix" readonly>
+
+      <label for="reduction">Remises (%) :</label>
       <input type="number" id="reduction" min="0" max="100" value="0">
 
-      <label for="motif">Motif de réduction (optionnel) :</label>
-      <input type="text" id="motif" placeholder="Ex: remise fidélité, offre spéciale...">
+      <label for="motif">Commentaires / Motifs :</label>
+      <input type="text" id="motif" placeholder="Remises, fidélité, etc.">
 
       <label for="total">Total :</label>
       <input type="number" id="total" readonly>
 
-      <label for="totalFinal">Total après réduction :</label>
+      <label for="totalFinal">Total après remise :</label>
       <input type="number" id="totalFinal" readonly>
 
       <button type="submit">Envoyer la facture</button>
@@ -329,7 +283,6 @@ if(user){
   document.getElementById('vendeur').value = user;
   document.getElementById('usernameDisplay').textContent = user;
 } else {
-  // pas connecté, redirection
   window.location.href = "login.html";
 }
 
@@ -339,7 +292,7 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   window.location.href = 'index.html';
 });
 
-// --- CSV complet (intégré tel que fourni) ---
+// --- CSV et catégories ---
 const csvData = `VÉHICULES;PRIX USINE;PRIX VENTE
 COMPACTS;;
 Blista;8 000;30 400
@@ -610,47 +563,37 @@ Voltic;90 000;342 000
 Voltic 2;3 830 400;14 555 520
 Zentorno;1 500 000;5 700 000`;
 
-// --- Parsing CSV et remplissage catégories / véhicules ---
-const lignes = csvData.trim().split("\n");
 const categories = {};
 let currentCat = "";
-for(let i=1;i<lignes.length;i++){
-  // split by ; but keep entries trim-safe
-  const parts = lignes[i].split(";");
-  const nom = (parts[0]||"").trim();
-  const usine = (parts[1]||"").trim();
-  const vente = (parts[2]||"").trim();
-  if(nom && !usine && !vente){
-    currentCat = nom;
-    categories[currentCat] = [];
-  } else if(currentCat && nom){
-    // parse prix vente to number (may contain spaces)
-    const prixNum = vente ? parseFloat(vente.replace(/\s/g, '')) : 0;
-    categories[currentCat].push({ nom: nom, prix: prixNum });
+csvData.split("\n").forEach(line=>{
+  if(!line.trim()) return;
+  const [v, prixU, prixV] = line.split(";");
+  if(prixU === "" && prixV === "") { currentCat = v; categories[currentCat] = []; return; }
+  if(currentCat){
+    categories[currentCat].push({
+      nom: v,
+      usine: parseFloat(prixU.replace(/\s/g,'')) || 0,
+      prix: parseFloat(prixV.replace(/\s/g,'')) || 0
+    });
   }
-}
+});
 
+// --- Remplissage catégories ---
 const catSelect = document.getElementById('categorie');
 const vehSelect = document.getElementById('vehicule');
 const prixInput = document.getElementById('prix');
-const quantiteInput = document.getElementById('quantite');
-const reductionInput = document.getElementById('reduction');
-const totalInput = document.getElementById('total');
-const totalFinalInput = document.getElementById('totalFinal');
+const prixUsineInput = document.getElementById('prixUsine');
 
-Object.keys(categories).forEach(cat=>{
-  const opt = document.createElement('option');
-  opt.value = cat;
-  opt.textContent = cat;
-  catSelect.appendChild(opt);
+Object.keys(categories).forEach(c => {
+  const option = document.createElement('option');
+  option.value = c;
+  option.textContent = c;
+  catSelect.appendChild(option);
 });
 
-// quand catégorie change
-catSelect.addEventListener('change', ()=>{
+// --- Quand catégorie change ---
+catSelect.addEventListener('change', () => {
   vehSelect.innerHTML = '<option value="">-- Sélectionner un véhicule --</option>';
-  prixInput.value = '';
-  totalInput.value = '';
-  totalFinalInput.value = '';
   const list = categories[catSelect.value] || [];
   list.forEach(v => {
     const o = document.createElement('option');
@@ -658,137 +601,148 @@ catSelect.addEventListener('change', ()=>{
     o.textContent = v.nom;
     vehSelect.appendChild(o);
   });
+  prixInput.value = '';
+  prixUsineInput.value = '';
+  updateTotal();
 });
 
-// quand véhicule change
-vehSelect.addEventListener('change', ()=>{
+// --- Quand véhicule change ---
+vehSelect.addEventListener('change', () => {
   const list = categories[catSelect.value] || [];
   const selected = list.find(x => x.nom === vehSelect.value);
-  prixInput.value = selected ? selected.prix : '';
+  if(selected){
+    prixInput.value = selected.prix;
+    prixUsineInput.value = selected.usine;
+  } else {
+    prixInput.value = '';
+    prixUsineInput.value = '';
+  }
   updateTotal();
 });
 
-// calculs
-quantiteInput.addEventListener('input', updateTotal);
-reductionInput.addEventListener('input', updateTotal);
+// --- Calcul total ---
+const quantInput = document.getElementById('quantite');
+const reductionInput = document.getElementById('reduction');
+const totalInput = document.getElementById('total');
+const totalFinalInput = document.getElementById('totalFinal');
 
-function updateTotal() {
-  const prix = parseFloat(document.getElementById('prix').value) || 0;
-  const qte = parseInt(document.getElementById('quantite').value) || 1;
-  const reduc = parseFloat(document.getElementById('reduction').value) || 0;
-
-  const total = prix * qte;
-  document.getElementById('total').value = total.toFixed(0);
-
-  // Si réduction > 0, on calcule et affiche le total réduit
-  if (reduc > 0) {
-    const totalReduit = total - (total * reduc / 100);
-    document.getElementById('totalFinal').value = totalReduit.toFixed(0);
-  } 
-  // Sinon, on laisse vide
-  else {
-    document.getElementById('totalFinal').value = "";
-  }
+function updateTotal(){
+  const prix = parseFloat(prixInput.value)||0;
+  const qte = parseInt(quantInput.value)||1;
+  const reduc = parseFloat(reductionInput.value)||0;
+  const total = prix*qte;
+  totalInput.value = total.toFixed(0);
+  totalFinalInput.value = reduc>0 ? (total - total*reduc/100).toFixed(0) : total.toFixed(0);
 }
 
+quantInput.addEventListener('input', updateTotal);
+reductionInput.addEventListener('input', updateTotal);
 
-// --- Envoi au webhook Discord (utilise ton webhook exact ci-dessous) ---
-document.getElementById('factureForm').addEventListener('submit', async (e) => {
+// --- Scroll top bouton ---
+const scrollBtn = document.getElementById("scrollTopBtn");
+window.onscroll = function() {
+  scrollBtn.style.display = document.body.scrollTop > 200 || document.documentElement.scrollTop > 200 ? "block" : "none";
+};
+scrollBtn.addEventListener("click", ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+// --- Soumission formulaire ---
+document.getElementById('factureForm').addEventListener('submit', e=>{
   e.preventDefault();
+  updateTotal();
+  alert("Facture prête à être envoyée !\nTotal final : "+totalFinalInput.value);
+});
 
-  // recalc au cas où
+document.getElementById('factureForm').addEventListener('submit', async e=>{
+  e.preventDefault();
   updateTotal();
 
-  const client = document.getElementById('client').value.trim();
-  const vendeur = document.getElementById('vendeur').value.trim();
-  const date = document.getElementById('date').value;
-  const heure = document.getElementById('heure').value;
-  const categorie = document.getElementById('categorie').value;
-  const vehicule = document.getElementById('vehicule').value;
-  const quantite = document.getElementById('quantite').value;
-  const prixUnitaire = document.getElementById('prix').value;
-  const reduction = document.getElementById('reduction').value;
-  const motif = document.getElementById('motif').value || "Aucun";
-  const total = document.getElementById('totalFinal').value;
+  const payload = {
+    vendeur: document.getElementById('vendeur').value,
+    date: document.getElementById('date').value,
+    heure: document.getElementById('heure').value,
+    categorie: document.getElementById('categorie').value,
+    vehicule: document.getElementById('vehicule').value,
+    quantite: document.getElementById('quantite').value,
+    plaque: document.getElementById('plaque').value,
+    operation: document.getElementById('operation').value,
+    proprietaire: document.getElementById('proprietaire').value,
+    prixUsine: document.getElementById('prixUsine').value,
+    prixTTC: document.getElementById('prix').value,
+    remise: document.getElementById('reduction').value,
+    totalFinal: document.getElementById('totalFinal').value,
+    commentaires: document.getElementById('motif').value || "Aucun"
+  };
 
-const embed = {
-  title: "🧾 Nouvelle facture - Fenua Concess",
-  color: 0xff0000,
-  fields: [
-    { name: "👤 Client", value: client || "—", inline: true },
-    { name: "💼 Vendeur", value: vendeur || "—", inline: true },
-    { 
-      name: "📅 Date", 
-      value: (date 
-        ? new Date(date).toLocaleDateString('fr-FR') + (heure ? ` ${heure}` : "") 
-        : "—"), 
-      inline: false 
-    },
-    { name: "🚗 Catégorie", value: categorie || "—", inline: true },
-    { name: "🚘 Véhicule", value: vehicule || "—", inline: true },
-    { name: "🔢 Quantité", value: quantite.toString() || "0", inline: true },
-    { name: "💰 Prix unitaire", value: (prixUnitaire ? Number(prixUnitaire).toLocaleString() + " $" : "—"), inline: true },
-    { name: "📉 Réduction", value: (reduction ? reduction + " %" : "0 %"), inline: true },
-    { name: "🎟️ Motif", value: motif || "Aucun", inline: false },
-    { name: "💵 Total après réduction", value: (total ? Number(total).toLocaleString() + " $" : "0 $"), inline: false }
-  ],
-  footer: { text: "Fenua Concess - Portail Interne" },
-  timestamp: new Date().toISOString()
-};
+  // --- Envoi Google Sheets ---
+  try {
+    const sheetResponse = await fetch("https://script.google.com/macros/s/AKfycbwyxboz1nvvL4DXAuCCc3bgPi_pgDHRrCo9Fpear9dn0tJhcOdslR5UB1ecaeLiivLaNg/exec", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const result = await sheetResponse.json();
+    if(result.status === "success"){
+      console.log("✅ Facture ajoutée sur Google Sheets !");
+    } else {
+      console.error("❌ Erreur Google Sheets :", result.message);
+    }
+  } catch(err){
+    console.error("⚠️ Impossible d'envoyer sur Google Sheets :", err);
+  }
 
+  // --- Envoi Discord (existant) ---
+  const discordData = {
+    username: "Fenua Concess - Facture",
+    embeds: [{
+      title: "📄 Nouvelle facture créée",
+      color: 0xff0000,
+      fields: [
+        { name: "🧑‍💼 Vendeur", value: payload.vendeur, inline: true },
+        { name: "📅 Date", value: payload.date, inline: true },
+        { name: "⏰ Heure", value: payload.heure, inline: true },
+        { name: "🚗 Catégorie", value: payload.categorie, inline: true },
+        { name: "🚘 Véhicule", value: payload.vehicule, inline: true },
+        { name: "🔢 Quantité", value: payload.quantite, inline: true },
+        { name: "🏷 Plaque", value: payload.plaque, inline: true },
+        { name: "🔄 Opération", value: payload.operation, inline: true },
+        { name: "👤 Propriétaire", value: payload.proprietaire, inline: true },
+        { name: "🏭 Prix d'usine", value: payload.prixUsine, inline: true },
+        { name: "💰 Prix TTC", value: payload.prixTTC, inline: true },
+        { name: "🎁 Remise (%)", value: payload.remise, inline: true },
+        { name: "🧾 Total final", value: payload.totalFinal, inline: true },
+        { name: "📝 Commentaires", value: payload.commentaires }
+      ],
+      timestamp: new Date()
+    }]
+  };
 
-  // --> Remplace ci-dessous par TON webhook réel (déjà fourni dans la conversation)
-  const webhookURL = 'https://discord.com/api/webhooks/1434167082018406530/h1MrBR0pL38eORKh0v85Y4DE2JMh0nS83J--pSdlmPsFMk64QHJb2X7Ajm-2XOjJ9wsb';
+  const webhookUrl = "https://discord.com/api/webhooks/1434167082018406530/h1MrBR0pL38eORKh0v85Y4DE2JMh0nS83J--pSdlmPsFMk64QHJb2X7Ajm-2XOjJ9wsb";
 
   try {
-    const res = await fetch(webhookURL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ embeds: [embed] })
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(discordData)
     });
+if(response.ok){
+  alert("✅ Facture envoyée sur Discord et Google Sheets avec succès !");
+  document.getElementById('factureForm').reset();
+  updateTotal();
 
-    const msgEl = document.getElementById('message');
-    if(res.ok){
-      msgEl.textContent = '✅ Facture envoyée sur Discord !';
-      msgEl.style.color = 'green';
-      document.getElementById('factureForm').reset();
-      // remettre vendeur / user affiché
-      if(user){
-        document.getElementById('vendeur').value = user;
-        document.getElementById('usernameDisplay').textContent = user;
-      }
-      totalInput.value = '';
-      totalFinalInput.value = '';
-    } else {
-      msgEl.textContent = '❌ Erreur lors de l\'envoi (webhook).';
-      msgEl.style.color = 'red';
-      console.error('Webhook status:', res.status, await res.text());
-    }
+  // ✅ Réactualiser la page après 1 seconde
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
+} else {
+  alert("❌ Erreur lors de l'envoi sur Discord.");
+}
+
   } catch (err) {
     console.error(err);
-    const msgEl = document.getElementById('message');
-    msgEl.textContent = '❌ Erreur lors de l\'envoi (réseau).';
-    msgEl.style.color = 'red';
+    alert("⚠️ Impossible d'envoyer la facture. Vérifiez votre webhook.");
   }
 });
 
-// --- Bouton remonter en haut ---
-const scrollBtn = document.getElementById('scrollTopBtn');
-window.onscroll = function() {
-  scrollBtn.style.display = (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) ? "block" : "none";
-};
-scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-// --- Bloquer clic droit / inspecteur ---
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-  if(e.key === "F12" || e.keyCode === 123) e.preventDefault();
-  if(e.ctrlKey && e.shiftKey && ['I','J','C'].includes((e.key||'').toUpperCase())) e.preventDefault();
-  if(e.ctrlKey && ((e.key||'').toUpperCase() === 'U' || e.keyCode === 85)) e.preventDefault();
-});
-document.addEventListener('dragstart', e => e.preventDefault());
-document.addEventListener('selectstart', e => e.preventDefault());
 </script>
-
 </body>
 </html>
