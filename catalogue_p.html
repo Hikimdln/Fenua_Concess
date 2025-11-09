@@ -232,7 +232,7 @@ fetch('catalogue.csv')
         img.onerror=()=>{ img.remove(); const noImg=document.createElement('div'); noImg.className='no-image'; noImg.textContent='Aucune image disponible'; card.prepend(noImg); };
 
         const name=document.createElement('h3'); name.textContent=cols[0];
-        const price=document.createElement('p'); price.textContent=cols[2] ? `Prix: ${cols[2]}$` : '-';
+        const price=document.createElement('p'); price.textContent=cols[2] ? `Prix: ${cols[2]} XPF` : '-';
 
         card.appendChild(img);
         card.appendChild(name);
